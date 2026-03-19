@@ -1,14 +1,15 @@
-﻿namespace VisualProgramming.Domain.Entites;
+﻿using VisualProgramming.Domain.Base;
 
-public class Connection
+namespace VisualProgramming.Domain.Entites;
+
+public class Connection : Entity<Guid>
 {
-    public Guid Id { get; private set; }
     public Port SourcePortId { get; private set; }
     public Port TargetPortId { get; private set; }
 
     public Connection(Port sourcePortId, Port targetPortId)
+        : base(Guid.NewGuid())
     {
-        Id = Guid.NewGuid();
         SourcePortId = sourcePortId;
         TargetPortId = targetPortId;
     }

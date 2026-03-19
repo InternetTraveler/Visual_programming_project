@@ -1,20 +1,16 @@
-﻿using System.Reflection;
+﻿using VisualProgramming.Domain.Base;
+using VisualProgramming.ValueObject;
 
 namespace VisualProgramming.Domain.Entites;
 
-public class Project
+public class Project : Entity<Guid>
 {
-    public Guid Id { get; private set; }
-    public string Name { get; private set; }
+    public Name Name { get; private set; }
 
     // Навигационные свойства
     private readonly List<BaseNode> _nodes = new();
     public IReadOnlyCollection<BaseNode> Nodes => _nodes.AsReadOnly();
-    public Project(string name)
-    {
-        Id = Guid.NewGuid();
-        Name = name ?? throw new ArgumentNullException(nameof(name));
-    }
+    public Project(string name) : base(Guid.NewGuid()) => Name = name;
 
     // Управление узлами
     public void AddNode(BaseNode node)

@@ -4,8 +4,6 @@ namespace VisualProgramming.Domain.Entites;
 
 public class Node : BaseNode
 {
-    public Guid Id { get; private set; }
-
     public Node(string name, Project projectId, double positionX, double positionY)
         : base(name, projectId, positionX, positionY) { }
 

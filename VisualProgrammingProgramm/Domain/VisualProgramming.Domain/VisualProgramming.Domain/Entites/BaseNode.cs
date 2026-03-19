@@ -1,10 +1,11 @@
-﻿using System.Xml.Linq;
+﻿using VisualProgramming.Domain.Base;
+using VisualProgramming.ValueObject;
 
 namespace VisualProgramming.Domain.Entites;
 
-public abstract class BaseNode
+public abstract class BaseNode : Entity<Guid>
 {
-    public string Name { get; private set; }
+    public Name Name { get; private set; }
     public Project ProjectId { get; private set; }
     public double PositionX { get; private set; }
     public double PositionY { get; private set; }
@@ -15,8 +16,9 @@ public abstract class BaseNode
     public IReadOnlyCollection<Connection> Connections => _connection.ToList().AsReadOnly();
 
     public BaseNode(string name, Project projectId, double positionX, double positionY)
+        :base(Guid.NewGuid())
     {
-        Name = name ?? throw new ArgumentNullException(nameof(name));
+        Name = name;
         ProjectId = projectId;
         PositionX = positionX;
         PositionY = positionY;

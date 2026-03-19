@@ -10,4 +10,8 @@
     <Folder Include="Exeption\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\VisualProgramming.ValueObject\VisualProgramming.ValueObject\VisualProgramming.ValueObject.csproj" />
+  </ItemGroup>
+
 </Project>
