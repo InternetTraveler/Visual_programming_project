@@ -1,4 +1,6 @@
-﻿namespace VisualProgramming.ValueObject.Base;
+﻿using VisualProgramming.ValueObject.Exeption;
+
+namespace VisualProgramming.ValueObject.Base;
 public abstract class ValueObjects<T> : IEquatable<ValueObjects<T>> where T : IEquatable<T>
 {
     public T Value { get; }
@@ -6,7 +8,7 @@ public abstract class ValueObjects<T> : IEquatable<ValueObjects<T>> where T : IE
     protected ValueObjects(IValidator<T> validator, T value)
     {
         if (validator == null)
-            throw new ArgumentNullException("AAAAAAAAAAAAAAAAA");
+            throw new ValidatorValueObjectNullExeption(validator!.GetType());
 
         validator.Validate(value);
         Value = value;
@@ -21,7 +23,7 @@ public abstract class ValueObjects<T> : IEquatable<ValueObjects<T>> where T : IE
     public bool Equals(ValueObjects<T>? other)
     {
         if (other is null)
-            throw new ArgumentNullException("other!");
+            throw new ValueObjectNullException(nameof(other), other!.GetType());
 
         if (ReferenceEquals(this, other))
             return true;
