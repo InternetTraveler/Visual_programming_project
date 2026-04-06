@@ -1,23 +1,29 @@
-﻿using VisualProgramming.Domain.Enum;
+﻿using VisualProgramming.ValueObject;
 
 namespace VisualProgramming.Domain.Entites;
 
 public class Node : BaseNode
 {
-    public Node(string name, Project projectId, double positionX, double positionY)
-        : base(name, projectId, positionX, positionY) { }
-
-    public Port AddPort(TypePort typePort, string description)
+    public Operation Opperation { get; private set; }
+    public Node(Name name, Operation operation)
+        : base(name) 
     {
-        var port = new Port(Id, typePort, description);
-        _ports.Add(port);
-        return port;
+        Opperation = operation ?? throw new Exception();
     }
 
-    public void RemovePort(Port portId)
+    public void AddPort(Port port)
     {
-        var port = _ports.First(p => p == portId);
-        if (port != null)
-            _ports.Remove(port);
+        if(port is null)
+            throw new Exception();
+
+        _ports.Add(port);
+    }
+
+    public void RemovePort(Port port)
+    {
+        if(port is null)
+            throw new ArgumentNullException("port");
+
+        _ports.Remove(port);
     }
 }

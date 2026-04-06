@@ -1,15 +1,14 @@
-﻿namespace VisualProgramming.Domain.Entites;
+﻿using VisualProgramming.ValueObject;
+
+namespace VisualProgramming.Domain.Entites;
 
 public class Modul : BaseNode
 {
-    public Guid ProjectCreateId { get; private set; }
+    public Graf GrafOperation { get; private set; }
 
-    private ICollection<Operation> operations = [];
-    public IReadOnlyCollection<Operation> Operations => operations.ToList().AsReadOnly();
-
-    public Modul(string name, Guid projectCreateId, Project projectId, double positionX, double positionY) :
-        base(name, projectId, positionX, positionY)
+    public Modul(Name name, Graf grafOPeration) :
+        base(name)
     {
-        ProjectCreateId = projectCreateId;
+        GrafOperation = grafOPeration;
     }
 }
