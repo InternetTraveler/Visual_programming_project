@@ -1,14 +1,15 @@
-﻿using VisualProgramming.ValueObject;
+﻿using VisualProgramming.Domain.Enum;
+using VisualProgramming.ValueObject;
 
 namespace VisualProgramming.Domain.Entites;
 
 public class Node : BaseNode
 {
-    public Operation Opperation { get; private set; }
-    public Node(Name name, Operation operation)
+    public Enum.TypeOperation TypeOperation { get; private set; }
+    public Node(Name name, Enum.TypeOperation typeOperation)
         : base(name) 
     {
-        Opperation = operation ?? throw new Exception();
+        TypeOperation = typeOperation;
     }
 
     public void AddPort(Port port)
