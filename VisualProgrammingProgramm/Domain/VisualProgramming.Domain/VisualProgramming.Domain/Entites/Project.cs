@@ -8,20 +8,26 @@ public class Project : Entity<Guid>
     public Name Name { get; private set; }
 
     // Навигационные свойства
-    private readonly List<BaseNode> _nodes = new();
-    public IReadOnlyCollection<BaseNode> Nodes => _nodes.AsReadOnly();
+    private readonly List<Graf> _grafs = new();
+    public IReadOnlyCollection<Graf> Grafs => _grafs.AsReadOnly();
     public Project(string name) : base(Guid.NewGuid()) => Name = name;
 
     // Управление узлами
-    public void AddNode(BaseNode node)
+    public void AddGraf(Graf graf)
     {
-        _nodes.Add(node);
+        if (graf is null)
+            throw new Exception();
+
+        _grafs.Add(graf);
     }
 
-    public void RemoveNode(BaseNode _node)
+    public void RemoveGraf(Graf _graf)
     {
-        var node = _nodes.First(n => n == _node);
-        if (node != null)
-            _nodes.Remove(node);
+        var graf = _grafs.First(n => n == _graf);
+
+        if (graf is null)
+            throw new Exception();
+
+        _grafs.Remove(graf);
     }
 }

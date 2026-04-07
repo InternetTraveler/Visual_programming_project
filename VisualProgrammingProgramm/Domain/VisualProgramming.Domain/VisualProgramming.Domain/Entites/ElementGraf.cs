@@ -1,11 +1,12 @@
 ﻿using VisualProgramming.Domain.Base;
+using VisualProgramming.ValueObject;
 
 namespace VisualProgramming.Domain.Entites;
 
 public class ElementGraf : Entity<Guid>
 {
     public BaseNode? Node { get; private set; }
-    public int LevelLevelOfDepthOperation { get; private set; }
+    public LevelOfDepth LevelLevelOfDepthOperation { get; private set; }
     public bool IsModul { get; private set; }
     public Graf? ParentGraf { get; private set; }
 
@@ -25,6 +26,14 @@ public class ElementGraf : Entity<Guid>
         PositionY = positionY;
     }
 
+    public void UpdateNode(BaseNode node)
+    {
+        if(node is null)
+            throw new Exception();
+
+        Node = node;
+    }
+
     public void UpdatePosition(double positionX, double positionY)
     {
         PositionX = positionX;
@@ -34,7 +43,7 @@ public class ElementGraf : Entity<Guid>
     public void UpdateGraf(Graf graf)
         => ParentGraf = graf ?? throw new Exception();
 
-    public void UpdateLevelOfDepth(int newLevel)
+    public void UpdateLevelOfDepth(LevelOfDepth newLevel)
         => LevelLevelOfDepthOperation = newLevel;
 
     public bool IsContainsGraf(Graf graf) =>

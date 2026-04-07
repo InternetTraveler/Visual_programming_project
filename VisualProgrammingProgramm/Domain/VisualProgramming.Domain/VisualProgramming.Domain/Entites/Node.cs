@@ -1,4 +1,5 @@
-﻿using VisualProgramming.Domain.Enum;
+﻿using VisualProgramming.Domain.Base;
+using VisualProgramming.Domain.Enum;
 using VisualProgramming.ValueObject;
 
 namespace VisualProgramming.Domain.Entites;

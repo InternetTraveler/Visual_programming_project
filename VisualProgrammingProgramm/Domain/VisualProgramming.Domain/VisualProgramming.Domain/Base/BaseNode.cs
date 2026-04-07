@@ -1,7 +1,7 @@
-﻿using VisualProgramming.Domain.Base;
+﻿using VisualProgramming.Domain.Entites;
 using VisualProgramming.ValueObject;
 
-namespace VisualProgramming.Domain.Entites;
+namespace VisualProgramming.Domain.Base;
 
 public abstract class BaseNode : Entity<Guid>
 {

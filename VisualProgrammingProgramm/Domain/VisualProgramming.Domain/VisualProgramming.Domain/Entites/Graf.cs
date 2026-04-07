@@ -5,10 +5,19 @@ namespace VisualProgramming.Domain.Entites;
 
 public class Graf : Entity<Guid>
 {
+    public Project Project { get; private set; }
+
     private ICollection<ElementGraf> elementsGraf = [];
     public ReadOnlyCollection<ElementGraf> ElementsGraf => elementsGraf.ToList().AsReadOnly();
 
-    public Graf() : base(Guid.NewGuid()) { }
+    public Graf(Project project) : base(Guid.NewGuid()) 
+       => Project = project ?? throw new Exception();
+
+    public bool IsContainsProject(Project project)
+        => project == Project;
+
+    public void UpdateProject(Project project)
+        => Project = project ?? throw new Exception();
 
     public void AddElement(ElementGraf element)
     {
