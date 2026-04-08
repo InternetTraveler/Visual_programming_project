@@ -8,9 +8,9 @@ public class Project : Entity<Guid>
     public Name Name { get; private set; }
 
     // Навигационные свойства
-    private readonly List<Graf> _grafs = new();
-    public IReadOnlyCollection<Graf> Grafs => _grafs.AsReadOnly();
-    public Project(string name) : base(Guid.NewGuid()) => Name = name;
+    private ICollection<Graf> _grafs = [];
+    public IReadOnlyCollection<Graf> Grafs => _grafs.ToList().AsReadOnly();
+    public Project(Name name) : base(Guid.NewGuid()) => Name = name;
 
     // Управление узлами
     public void AddGraf(Graf graf)

@@ -14,7 +14,7 @@ public class ElementGraf : Entity<Guid>
     public double PositionX {  get; private set; }
     public double PositionY { get; private set; }
 
-    public ElementGraf(BaseNode baseNode, int levelLevelOfDepthOperation, bool isModul,
+    public ElementGraf(BaseNode baseNode, LevelOfDepth levelLevelOfDepthOperation, bool isModul,
         Graf graf, double positionX, double positionY)
         : base(Guid.NewGuid())
     {

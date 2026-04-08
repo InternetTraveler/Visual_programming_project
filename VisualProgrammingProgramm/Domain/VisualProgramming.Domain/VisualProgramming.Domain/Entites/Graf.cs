@@ -8,7 +8,7 @@ public class Graf : Entity<Guid>
     public Project Project { get; private set; }
 
     private ICollection<ElementGraf> elementsGraf = [];
-    public ReadOnlyCollection<ElementGraf> ElementsGraf => elementsGraf.ToList().AsReadOnly();
+    public IReadOnlyCollection<ElementGraf> ElementsGraf => elementsGraf.ToList().AsReadOnly();
 
     public Graf(Project project) : base(Guid.NewGuid()) 
        => Project = project ?? throw new Exception();
