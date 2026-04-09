@@ -1,4 +1,5 @@
 ﻿using VisualProgramming.Domain.Base;
+using VisualProgramming.Domain.Exceptions.NullExeption;
 using VisualProgramming.ValueObject;
 
 namespace VisualProgramming.Domain.Entites;
@@ -18,10 +19,10 @@ public class ElementGraf : Entity<Guid>
         Graf graf, double positionX, double positionY)
         : base(Guid.NewGuid())
     {
-        Node = baseNode ?? throw new Exception();
+        Node = baseNode ?? throw new ElementGrafNullExeption(this, nameof(baseNode), typeof(BaseNode));
         LevelLevelOfDepthOperation = levelLevelOfDepthOperation;
         IsModul = isModul;
-        ParentGraf = graf ?? throw new Exception();
+        ParentGraf = graf ?? throw new ElementGrafNullExeption(this, nameof(graf), typeof(Graf));
         PositionX = positionX;
         PositionY = positionY;
     }
@@ -29,7 +30,7 @@ public class ElementGraf : Entity<Guid>
     public void UpdateNode(BaseNode node)
     {
         if(node is null)
-            throw new Exception();
+            throw new ElementGrafNullExeption(this, nameof(node), typeof(BaseNode));
 
         Node = node;
     }
@@ -41,7 +42,7 @@ public class ElementGraf : Entity<Guid>
     }
 
     public void UpdateGraf(Graf graf)
-        => ParentGraf = graf ?? throw new Exception();
+        => ParentGraf = graf ?? throw new ElementGrafNullExeption(this, nameof(graf), typeof(Graf));
 
     public void UpdateLevelOfDepth(LevelOfDepth newLevel)
         => LevelLevelOfDepthOperation = newLevel;

@@ -1,4 +1,7 @@
-﻿using VisualProgramming.Domain.Entites;
+﻿using System.Xml.Linq;
+using VisualProgramming.Domain.Entites;
+using VisualProgramming.Domain.Exceptions;
+using VisualProgramming.Domain.Exceptions.NullExeption;
 using VisualProgramming.ValueObject;
 
 namespace VisualProgramming.Domain.Base;
@@ -19,18 +22,18 @@ public abstract class BaseNode : Entity<Guid>
     public void AddNodePortConnection(NodePortConnection _nodePortConnection)
     {
         if (_nodePortConnection is null)
-            throw new Exception();
+            throw new NodeNullExeption(this, nameof(_nodePortConnection), typeof(NodePortConnection));
 
         nodePortConnections.Add(_nodePortConnection);
     }
 
     public void RemoveNodePortConnection(NodePortConnection _nodePortConnection)
     {
-        if (nodePortConnections.Contains(_nodePortConnection))
-            throw new Exception();
+        if (!nodePortConnections.Contains(_nodePortConnection))
+            throw new GrafContainmentException(this, _nodePortConnection);
 
-        if (_nodePortConnection is null)
-            throw new Exception();
+        if (!_nodePortConnection.IsContainNode(this))
+            throw new GrafContainmentException(_nodePortConnection, this);
 
         nodePortConnections.Remove(_nodePortConnection);
     }

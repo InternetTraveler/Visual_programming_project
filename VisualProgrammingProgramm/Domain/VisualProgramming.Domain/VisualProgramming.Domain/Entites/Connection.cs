@@ -1,54 +1,56 @@
 ﻿using VisualProgramming.Domain.Base;
+using VisualProgramming.Domain.Exceptions;
+using VisualProgramming.Domain.Exceptions.NullExeption;
 
 namespace VisualProgramming.Domain.Entites;
 
 public class Connection : Entity<Guid>
 {
-    public ElementGraf outElementGraf { get; private set; }
+    public ElementGraf InElementGraf { get; private set; }
     public Port SourcePort { get; private set; }
 
-    public ElementGraf OutElemGraf { get; private set; }
+    public ElementGraf OutElementGraf { get; private set; }
     public Port TargetPort { get; private set; }
 
-    public Connection(Port sourcePortId, Port targetPortId, ElementGraf outElemGraf, ElementGraf inElementGraf)
+    public Connection(Port sourcePortId, Port targetPortId, ElementGraf inElementGraf, ElementGraf outElemGraf)
         : base(Guid.NewGuid())
     {
         if (sourcePortId.TypePort == targetPortId.TypePort)
-            throw new Exception();
+            throw new TypePortConnectionExeption(this, sourcePortId, targetPortId);
 
-        SourcePort = sourcePortId ?? throw new Exception();
-        TargetPort = targetPortId ?? throw new Exception();
-        OutElemGraf = outElemGraf ?? throw new Exception();
-        outElementGraf = inElementGraf ?? throw new Exception();
+        SourcePort = sourcePortId ?? throw new ConnectionNullExeption(this, nameof(sourcePortId), typeof(Port));
+        TargetPort = targetPortId ?? throw new ConnectionNullExeption(this, nameof(targetPortId), typeof(Port));
+        OutElementGraf = outElemGraf ?? throw new ConnectionNullExeption(this, nameof(outElemGraf), typeof(ElementGraf));
+        InElementGraf = inElementGraf ?? throw new ConnectionNullExeption(this, nameof(inElementGraf), typeof(ElementGraf));
     }
 
     public void UpdateInConnection(ElementGraf element, Port port)
     {
         if (port is null)
-            throw new Exception();
+            throw new ConnectionNullExeption(this, nameof(port), typeof(Port));
 
         if (port.TypePort == TargetPort.TypePort)
-            throw new Exception();
+            throw new TypePortConnectionExeption(this, port, TargetPort);
 
         if (element is null)
-            throw new Exception();
+            throw new ConnectionNullExeption(this, nameof(element), typeof(ElementGraf));
 
-        outElementGraf = element;
+        InElementGraf = element;
         SourcePort = port;
     }
 
     public void UpdateOutConnection(ElementGraf element, Port port)
     {
         if (port is null)
-            throw new Exception();
+            throw new ConnectionNullExeption(this, nameof(port), typeof(Port));
 
-        if (port.TypePort == TargetPort.TypePort)
-            throw new Exception();
+        if (port.TypePort == SourcePort.TypePort)
+            throw new TypePortConnectionExeption(this, SourcePort, port);
 
         if (element is null)
-            throw new Exception();
+            throw new ConnectionNullExeption(this, nameof(element), typeof(ElementGraf));
 
-        outElementGraf = element;
+        OutElementGraf = element;
         TargetPort = port;
     }
 }

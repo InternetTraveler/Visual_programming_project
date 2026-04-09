@@ -1,6 +1,8 @@
-﻿using VisualProgramming.Domain.Base;
+﻿using System.Xml.Linq;
+using VisualProgramming.Domain.Base;
 using VisualProgramming.Domain.Enum;
 using VisualProgramming.Domain.Exceptions;
+using VisualProgramming.Domain.Exceptions.NullExeption;
 using VisualProgramming.ValueObject;
 namespace VisualProgramming.Domain.Entites;
 
@@ -16,7 +18,7 @@ public class Port : Entity<Guid>
     public Port(BaseNode node, TypePort typePort, string description)
         : base(Guid.NewGuid())
     {
-        Node = node ?? throw new InvalidPortDataException(node, typePort, description, "Not node");
+        Node = node ?? throw new PortNullExeption(this, nameof(node), typeof(Node));
         TypePort = typePort;
         Description = description;
     }
@@ -24,18 +26,18 @@ public class Port : Entity<Guid>
     public void AddNodePortConnection(NodePortConnection _nodePortConnection)
     {
         if (_nodePortConnection is null)
-            throw new Exception();
+            throw new PortNullExeption(this, nameof(_nodePortConnection), typeof(NodePortConnection));
 
         nodePortConnections.Add(_nodePortConnection);
     }
 
     public void RemoveNodePortConnection(NodePortConnection _nodePortConnection)
     {
-        if (_nodePortConnection is null)
-            throw new Exception();
+        if (!_nodePortConnection.IsContainPort(this))
+            throw new GrafContainmentException(this, _nodePortConnection);
 
         if (!nodePortConnections.Contains(_nodePortConnection))
-            throw new Exception();
+            throw new GrafContainmentException(_nodePortConnection, this);
 
         nodePortConnections.Remove(_nodePortConnection);
     }
