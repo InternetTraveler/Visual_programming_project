@@ -3,7 +3,6 @@ using VisualProgramming.Domain.Exceptions;
 using VisualProgramming.Domain.Exceptions.NullExeption;
 
 namespace VisualProgramming.Domain.Entites;
-
 public class Connection : Entity<Guid>
 {
     public ElementGraf InElementGraf { get; private set; }
@@ -12,14 +11,17 @@ public class Connection : Entity<Guid>
     public ElementGraf OutElementGraf { get; private set; }
     public Port TargetPort { get; private set; }
 
-    public Connection(Port sourcePortId, Port targetPortId, ElementGraf inElementGraf, ElementGraf outElemGraf)
+    public Connection(Port sourcePort, Port targetPort, ElementGraf inElementGraf, ElementGraf outElemGraf)
         : base(Guid.NewGuid())
     {
-        if (sourcePortId.TypePort == targetPortId.TypePort)
-            throw new TypePortConnectionExeption(this, sourcePortId, targetPortId);
+        if (sourcePort.TypePort == targetPort.TypePort)
+            throw new TypePortConnectionExeption(this, sourcePort, targetPort);
 
-        SourcePort = sourcePortId ?? throw new ConnectionNullExeption(this, nameof(sourcePortId), typeof(Port));
-        TargetPort = targetPortId ?? throw new ConnectionNullExeption(this, nameof(targetPortId), typeof(Port));
+        if(inElementGraf == outElemGraf)
+            throw new EqvelElementGrafExeption(this, inElementGraf);
+
+        SourcePort = sourcePort ?? throw new ConnectionNullExeption(this, nameof(sourcePort), typeof(Port));
+        TargetPort = targetPort ?? throw new ConnectionNullExeption(this, nameof(targetPort), typeof(Port));
         OutElementGraf = outElemGraf ?? throw new ConnectionNullExeption(this, nameof(outElemGraf), typeof(ElementGraf));
         InElementGraf = inElementGraf ?? throw new ConnectionNullExeption(this, nameof(inElementGraf), typeof(ElementGraf));
     }
@@ -35,6 +37,9 @@ public class Connection : Entity<Guid>
         if (element is null)
             throw new ConnectionNullExeption(this, nameof(element), typeof(ElementGraf));
 
+        if (InElementGraf == element)
+            throw new EqvelElementGrafExeption(this, element);
+
         InElementGraf = element;
         SourcePort = port;
     }
@@ -49,6 +54,9 @@ public class Connection : Entity<Guid>
 
         if (element is null)
             throw new ConnectionNullExeption(this, nameof(element), typeof(ElementGraf));
+
+        if (OutElementGraf == element)
+            throw new EqvelElementGrafExeption(this, element);
 
         OutElementGraf = element;
         TargetPort = port;
