@@ -10,13 +10,13 @@ public class DescriptionValidator : IValidator<string>
     public void Validate(string value)
     {
         if (string.IsNullOrEmpty(value))
-            throw new NameNullOrEmptyException(value);
+            throw new DescriptionNullOrEmptyException(value);
 
         value = value.Trim();
         if (value.Length > MaxLenghts)
-            throw new NameTooLongException(value, value.Length, MaxLenghts);
+            throw new DescriprionTooLongException(value, value.Length, MaxLenghts);
 
         if (value.Length < MinLenghts)
-            throw new NameTooShortException(value, value.Length, MinLenghts);
+            throw new DescriptionTooShortException(value, value.Length, MinLenghts);
     }
 }

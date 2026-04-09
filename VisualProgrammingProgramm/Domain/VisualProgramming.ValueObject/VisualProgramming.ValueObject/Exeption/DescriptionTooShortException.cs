@@ -1,10 +1,10 @@
 ﻿namespace VisualProgramming.ValueObject.Exeption;
 
-internal class NameTooShortException : StringValidationException
+internal class DescriptionTooShortException : StringValidationException
 {
     public int MinAllowedLength { get; }
 
-    public NameTooShortException(string name, int actualLength, int minAllowedLength)
+    public DescriptionTooShortException(string name, int actualLength, int minAllowedLength)
         : base(FormatMessage(name, actualLength, minAllowedLength), name, actualLength)
     {
         MinAllowedLength = minAllowedLength;
@@ -12,7 +12,7 @@ internal class NameTooShortException : StringValidationException
 
     private static string FormatMessage(string name, int actualLength, int minAllowedLength)
     {
-        return $"Длина названия '{name}' ({actualLength} символов) превышает " +
+        return $"Длина описания '{name}' ({actualLength} символов) превышает " +
             $"максимально допустимую длину в {minAllowedLength} символов";
     }
 }

@@ -1,8 +1,8 @@
 ﻿namespace VisualProgramming.ValueObject.Exeption;
 
-public class NameNullOrEmptyException : NameValidationException
+public class NameNullOrEmptyException : StringValidationException
 {
-    private const string DefaultMessage = "Название блока не может быть null или пустым";
+    private const string DefaultMessage = "Название не может быть null или пустым";
 
     public NameNullOrEmptyException(string blockName)
         : base(DefaultMessage, blockName) { }
