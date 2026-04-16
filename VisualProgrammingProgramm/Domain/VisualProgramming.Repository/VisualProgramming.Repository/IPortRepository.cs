@@ -3,7 +3,7 @@ using VisualProgramming.Repository.Base;
 
 namespace VisualProgramming.Repository;
 
-internal interface IPortRepository : IRepository<Port, Guid>
+public interface IPortRepository : IRepository<Port, Guid>
 {
     Task<Port?> GetPortByIdAsync(Guid id, CancellationToken cancellationToken);
 }
