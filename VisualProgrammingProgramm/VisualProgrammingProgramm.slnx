@@ -1,4 +1,11 @@
 <Solution>
+  <Folder Name="/Aplication/" />
+  <Folder Name="/Aplication/VisualProgramming.Models/">
+    <Project Path="Aplication/VisualProgramming.Models/VisualProgramming.Models.csproj" Id="b2452791-a6af-453f-bda7-182c9bdbe12f" />
+  </Folder>
+  <Folder Name="/Aplication/VisualProgramming.Services/">
+    <Project Path="Aplication/VisualProgramming.Abstraction/VisualProgramming.Services.csproj" Id="30d36f62-362c-4a89-b2a9-0d6c22e004cb" />
+  </Folder>
   <Folder Name="/Domain/" />
   <Folder Name="/Domain/VisualProgramming.Domain/">
     <Project Path="Domain/VisualProgramming.Domain/VisualProgramming.Domain/VisualProgramming.Domain.csproj" />
@@ -11,6 +18,16 @@
   </Folder>
   <Folder Name="/Domain/VisualProgramming.ValueObject/">
     <Project Path="Domain/VisualProgramming.ValueObject/VisualProgramming.ValueObject/VisualProgramming.ValueObject.csproj" Id="00e1d9c1-8263-4125-8201-ef7d9116f01e" />
+  </Folder>
+  <Folder Name="/Infrastructure/" />
+  <Folder Name="/Infrastructure/VisualProgramming.Configurations/">
+    <Project Path="Infrastructure/VisualProgramming.Configurations/VisualProgramming.Configurations.csproj" Id="8de1af9a-6136-494d-be6d-5a58e37a4b88" />
+  </Folder>
+  <Folder Name="/Infrastructure/VisualProgramming.Migrations/">
+    <Project Path="Infrastructure/VisualProgramming.Migrations/VisualProgramming.Migrations.csproj" Id="64f095cb-9144-47f8-9822-776cb1d7a1e1" />
+  </Folder>
+  <Folder Name="/Infrastructure/VisualProgramming.RepositoriesEF/">
+    <Project Path="Infrastructure/VisualProgramming.RepositoriesEF/VisualProgramming.RepositoriesEF.csproj" Id="3ea0cf32-422e-4f7b-8533-d0ed3f3b5d3a" />
   </Folder>
   <Project Path="VisualProgrammingProgramm/VisualProgrammingProgramm.csproj" />
 </Solution>
