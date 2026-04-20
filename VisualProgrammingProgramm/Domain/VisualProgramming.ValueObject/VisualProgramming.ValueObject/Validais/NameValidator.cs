@@ -1,7 +1,7 @@
 ﻿using VisualProgramming.ValueObject.Base;
 using VisualProgramming.ValueObject.Exeption;
 
-internal class NameValidator : IValidator<string>
+public class NameValidator : IValidator<string>
 {
     public static int MaxLenghts => 50;
     public static int MinLenghts => 5;

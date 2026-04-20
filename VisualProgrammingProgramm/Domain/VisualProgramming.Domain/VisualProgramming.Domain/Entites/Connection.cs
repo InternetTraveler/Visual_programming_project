@@ -6,10 +6,10 @@ namespace VisualProgramming.Domain.Entites;
 public class Connection : Entity<Guid>
 {
     public ElementGraf InElementGraf { get; private set; }
-    public Port SourcePort { get; private set; }
+    public Port? SourcePort { get; private set; }
 
     public ElementGraf OutElementGraf { get; private set; }
-    public Port TargetPort { get; private set; }
+    public Port? TargetPort { get; private set; }
 
     public Connection(Port sourcePort, Port targetPort, ElementGraf inElementGraf, ElementGraf outElemGraf)
         : base(Guid.NewGuid())
@@ -31,7 +31,7 @@ public class Connection : Entity<Guid>
         if (port is null)
             throw new ConnectionNullExeption(this, nameof(port), typeof(Port));
 
-        if (port.TypePort == TargetPort.TypePort)
+        if (port.TypePort == TargetPort!.TypePort)
             throw new TypePortConnectionExeption(this, port, TargetPort);
 
         if (element is null)
@@ -49,7 +49,7 @@ public class Connection : Entity<Guid>
         if (port is null)
             throw new ConnectionNullExeption(this, nameof(port), typeof(Port));
 
-        if (port.TypePort == SourcePort.TypePort)
+        if (port.TypePort == SourcePort!.TypePort)
             throw new TypePortConnectionExeption(this, SourcePort, port);
 
         if (element is null)
@@ -61,4 +61,7 @@ public class Connection : Entity<Guid>
         OutElementGraf = element;
         TargetPort = port;
     }
+
+    public bool IsContainsElementGraf(ElementGraf element)
+        => element == InElementGraf || element == OutElementGraf;
 }

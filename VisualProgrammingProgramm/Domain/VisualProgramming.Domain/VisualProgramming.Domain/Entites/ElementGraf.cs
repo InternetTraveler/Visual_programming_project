@@ -1,4 +1,5 @@
 ﻿using VisualProgramming.Domain.Base;
+using VisualProgramming.Domain.Exceptions;
 using VisualProgramming.Domain.Exceptions.NullExeption;
 using VisualProgramming.ValueObject;
 
@@ -11,9 +12,12 @@ public class ElementGraf : Entity<Guid>
     public bool IsModul { get; private set; }
     public Graf? ParentGraf { get; private set; }
 
-
     public double PositionX {  get; private set; }
     public double PositionY { get; private set; }
+
+    private ICollection<Connection> _elementGrafConnection = [];
+    public IReadOnlyCollection<Connection> ElementGrafConnections 
+        => _elementGrafConnection.ToList().AsReadOnly();
 
     public ElementGraf(BaseNode baseNode, LevelOfDepth levelLevelOfDepthOperation, bool isModul,
         Graf graf, double positionX, double positionY)
@@ -49,4 +53,18 @@ public class ElementGraf : Entity<Guid>
 
     public bool IsContainsGraf(Graf graf) =>
         graf == ParentGraf;
+
+    public void AddConnection(Connection connection)
+        => _elementGrafConnection.Add(connection);
+
+    public void RemuveConnection(Connection connection)
+    {
+        if (!_elementGrafConnection.Contains(connection))
+            throw new ConnectionContainmentExeption(this, connection);
+
+        if(!connection.IsContainsElementGraf(this))
+            throw new ConnectionContainmentExeption(connection, this);
+
+        _elementGrafConnection.Remove(connection);
+    }
 }

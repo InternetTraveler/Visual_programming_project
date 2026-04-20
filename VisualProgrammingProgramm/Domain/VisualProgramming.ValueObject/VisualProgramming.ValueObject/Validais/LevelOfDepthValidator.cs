@@ -3,7 +3,7 @@ using VisualProgramming.ValueObject.Exeption;
 
 namespace VisualProgramming.ValueObject.Validais;
 
-internal class LevelOfDepthValidator : IValidator<int>
+public class LevelOfDepthValidator : IValidator<int>
 {
     public void Validate(int value)
     {
