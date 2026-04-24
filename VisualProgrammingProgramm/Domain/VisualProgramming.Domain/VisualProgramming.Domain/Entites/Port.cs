@@ -1,20 +1,46 @@
-﻿using System.Xml.Linq;
-using VisualProgramming.Domain.Base;
+﻿using VisualProgramming.Domain.Base;
 using VisualProgramming.Domain.Enum;
 using VisualProgramming.Domain.Exceptions;
 using VisualProgramming.Domain.Exceptions.NullExeption;
 using VisualProgramming.ValueObject;
+
 namespace VisualProgramming.Domain.Entites;
 
+/// <summary>
+/// Представляет порт узла, который может быть входным или выходным.
+/// </summary>
 public class Port : Entity<Guid>
 {
+    /// <summary>
+    /// Получает узел, которому принадлежит порт.
+    /// </summary>
     public BaseNode Node { get; private set; }
+
+    /// <summary>
+    /// Получает тип порта (входной или выходной).
+    /// </summary>
     public TypePort TypePort { get; private set; }
+
+    /// <summary>
+    /// Получает описание порта.
+    /// </summary>
     public Description Description { get; private set; }
 
     private ICollection<NodePortConnection> nodePortConnections = [];
-    public IReadOnlyCollection<NodePortConnection> NodePortConnections => nodePortConnections.ToList().AsReadOnly();
 
+    /// <summary>
+    /// Получает коллекцию связей узла с портом.
+    /// </summary>
+    public IReadOnlyCollection<NodePortConnection> NodePortConnections 
+        => nodePortConnections.ToList().AsReadOnly();
+
+    /// <summary>
+    /// Инициализирует новый экземпляр порта.
+    /// </summary>
+    /// <param name="node">Узел-владелец порта.</param>
+    /// <param name="typePort">Тип порта.</param>
+    /// <param name="description">Описание порта.</param>
+    /// <exception cref="PortNullExeption">Выбрасывается, если node равен null.</exception>
     public Port(BaseNode node, TypePort typePort, string description)
         : base(Guid.NewGuid())
     {
@@ -23,6 +49,12 @@ public class Port : Entity<Guid>
         Description = description;
     }
 
+    /// <summary>
+    /// Добавляет связь узла с портом в коллекцию порта.
+    /// </summary>
+    /// <param name="_nodePortConnection">Добавляемая связь.</param>
+    /// <exception cref="PortNullExeption">Выбрасывается,
+    /// если _nodePortConnection равен null.</exception>
     public void AddNodePortConnection(NodePortConnection _nodePortConnection)
     {
         if (_nodePortConnection is null)
@@ -31,6 +63,12 @@ public class Port : Entity<Guid>
         nodePortConnections.Add(_nodePortConnection);
     }
 
+    /// <summary>
+    /// Удаляет связь узла с портом из коллекции порта.
+    /// </summary>
+    /// <param name="_nodePortConnection">Удаляемая связь.</param>
+    /// <exception cref="GrafContainmentException">Выбрасывается,
+    /// если связь не принадлежит порту или порт не участвует в связи.</exception>
     public void RemoveNodePortConnection(NodePortConnection _nodePortConnection)
     {
         if (!_nodePortConnection.IsContainPort(this))
