@@ -57,6 +57,14 @@ public class Connection : Entity<Guid>
         InElementGraf = inElementGraf ?? throw new ConnectionNullExeption(this, nameof(inElementGraf), typeof(ElementGraf));
     }
 
+    protected Connection() : base(Guid.NewGuid())
+    {
+        SourcePort = default!;
+        TargetPort = default!;
+        OutElementGraf = default!;
+        InElementGraf = default!;
+    }
+
     /// <summary>
     /// Обновляет входящее соединение (источник).
     /// </summary>

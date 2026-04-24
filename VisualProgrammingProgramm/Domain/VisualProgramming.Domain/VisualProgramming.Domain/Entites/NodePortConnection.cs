@@ -19,11 +19,6 @@ public class NodePortConnection : Entity<Guid>
     public Port? Port { get; private set; }
 
     /// <summary>
-    /// Инициализирует новый пустой экземпляр связи (требуется для некоторых фреймворков).
-    /// </summary>
-    public NodePortConnection() : base(Guid.NewGuid()) { }
-
-    /// <summary>
     /// Инициализирует новый экземпляр связи между узлом и портом.
     /// Автоматически добавляет связь в коллекции узла и порта.
     /// </summary>
@@ -39,6 +34,12 @@ public class NodePortConnection : Entity<Guid>
 
         Node.AddNodePortConnection(this);
         Port.AddNodePortConnection(this);
+    }
+
+    protected NodePortConnection() : base(Guid.NewGuid())
+    {
+        Node = default;
+        Port = default;
     }
 
     /// <summary>

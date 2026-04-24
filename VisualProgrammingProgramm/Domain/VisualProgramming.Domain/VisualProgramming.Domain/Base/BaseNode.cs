@@ -50,6 +50,9 @@ public abstract class BaseNode : Entity<Guid>
     public BaseNode(Name name)
         : base(Guid.NewGuid()) => Name = name;
 
+    protected BaseNode()
+        : base(Guid.NewGuid()) => Name = default!;
+
     /// <summary>
     /// Добавляет новое соединение порта к узлу.
     /// </summary>
@@ -65,6 +68,9 @@ public abstract class BaseNode : Entity<Guid>
     {
         if (_nodePortConnection is null)
             throw new NodeNullExeption(this, nameof(_nodePortConnection), typeof(NodePortConnection));
+
+        if (nodePortConnections.Contains(_nodePortConnection))
+            return;
 
         nodePortConnections.Add(_nodePortConnection);
     }

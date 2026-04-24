@@ -73,6 +73,16 @@ public class ElementGraf : Entity<Guid>
         PositionY = positionY;
     }
 
+    protected ElementGraf() : base(Guid.NewGuid())
+    {
+        Node = default;
+        LevelLevelOfDepthOperation = default!;
+        IsModul = default;
+        ParentGraf = default;
+        PositionX = default;
+        PositionY = default;
+    }
+
     /// <summary>
     /// Обновляет базовый узел элемента графа.
     /// </summary>
@@ -129,7 +139,15 @@ public class ElementGraf : Entity<Guid>
     /// </summary>
     /// <param name="connection">Добавляемое соединение.</param>
     public void AddConnection(Connection connection)
-        => _elementGrafConnection.Add(connection);
+    {
+        if (connection is null)
+            throw new ConnectionNullExeption(this, nameof(connection), typeof(Connection));
+
+        if (_elementGrafConnection.Contains(connection))
+            return;
+
+        _elementGrafConnection.Add(connection);
+    }
 
     /// <summary>
     /// Удаляет соединение из элемента графа.

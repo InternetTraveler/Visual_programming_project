@@ -1,4 +1,5 @@
 ﻿using VisualProgramming.Domain.Base;
+using VisualProgramming.Domain.Exceptions.NullExeption;
 using VisualProgramming.ValueObject;
 
 namespace VisualProgramming.Domain.Entites;
@@ -25,7 +26,11 @@ public class Project : Entity<Guid>
     /// Инициализирует новый экземпляр проекта.
     /// </summary>
     /// <param name="name">Имя проекта.</param>
-    public Project(Name name) : base(Guid.NewGuid()) => Name = name;
+    public Project(Name name) : base(Guid.NewGuid()) 
+        => Name = name;
+
+    protected Project() : base(Guid.NewGuid())
+        => Name = default!;
 
     /// <summary>
     /// Добавляет граф в проект.
@@ -36,7 +41,10 @@ public class Project : Entity<Guid>
     public void AddGraf(Graf graf)
     {
         if (graf is null)
-            throw new Exception();
+            throw new GrafNullExeption(this, nameof(graf), typeof(Graf));
+
+        if (_grafs.Contains(graf))
+            return;
 
         _grafs.Add(graf);
     }

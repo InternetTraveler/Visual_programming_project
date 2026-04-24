@@ -20,4 +20,7 @@ public class Node : BaseNode
     /// <param name="typeOperation">Тип операции.</param>
     public Node(Name name, Enum.TypeOperation typeOperation)
         : base(name) => TypeOperation = typeOperation;
+
+    protected Node() : base(default!) 
+        => TypeOperation = default!;
 }

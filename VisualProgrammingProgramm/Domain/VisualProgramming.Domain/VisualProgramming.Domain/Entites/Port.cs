@@ -49,6 +49,13 @@ public class Port : Entity<Guid>
         Description = description;
     }
 
+    protected Port() : base(Guid.NewGuid())
+    {
+        Node = default!;
+        TypePort = default!;
+        Description = default!;
+    }
+
     /// <summary>
     /// Добавляет связь узла с портом в коллекцию порта.
     /// </summary>
@@ -59,6 +66,9 @@ public class Port : Entity<Guid>
     {
         if (_nodePortConnection is null)
             throw new PortNullExeption(this, nameof(_nodePortConnection), typeof(NodePortConnection));
+
+        if (nodePortConnections.Contains(_nodePortConnection))
+            return;
 
         nodePortConnections.Add(_nodePortConnection);
     }

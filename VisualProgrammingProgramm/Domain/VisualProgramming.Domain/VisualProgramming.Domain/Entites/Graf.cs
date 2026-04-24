@@ -31,6 +31,9 @@ public class Graf : Entity<Guid>
     public Graf(Project project) : base(Guid.NewGuid())
        => Project = project ?? throw new GrafNullExeption(this, nameof(project), typeof(Project));
 
+    protected Graf() : base(Guid.NewGuid())
+        => Project = default!;
+
     /// <summary>
     /// Определяет, содержит ли граф указанный проект.
     /// </summary>
@@ -59,6 +62,9 @@ public class Graf : Entity<Guid>
     {
         if (element is null)
             throw new GrafNullExeption(this, nameof(element), typeof(ElementGraf));
+
+        if (elementsGraf.Contains(element))
+            return;
 
         elementsGraf.Add(element);
     }

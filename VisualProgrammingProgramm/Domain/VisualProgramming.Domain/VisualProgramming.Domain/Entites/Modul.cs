@@ -20,8 +20,7 @@ public class Modul : BaseNode
     /// <param name="name">Имя модуля.</param>
     /// <param name="grafOPeration">Граф операций модуля.</param>
     public Modul(Name name, Graf grafOPeration) :
-        base(name)
-    {
-        GrafOperation = grafOPeration;
-    }
+        base(name) => GrafOperation = grafOPeration;
+
+    protected Modul() : base(default!) => GrafOperation = default!;
 }
