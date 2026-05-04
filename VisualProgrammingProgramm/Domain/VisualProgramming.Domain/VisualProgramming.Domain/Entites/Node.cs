@@ -23,4 +23,7 @@ public class Node : BaseNode
 
     protected Node() : base(default!) 
         => TypeOperation = default!;
+
+    protected Node(Guid Id, Name name, Enum.TypeOperation typeOperation)
+        : base(Id, name) => TypeOperation = typeOperation;
 }

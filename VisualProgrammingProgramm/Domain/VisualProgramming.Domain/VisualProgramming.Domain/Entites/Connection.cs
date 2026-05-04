@@ -65,6 +65,21 @@ public class Connection : Entity<Guid>
         InElementGraf = default!;
     }
 
+    protected Connection(Guid Id, Port sourcePort, Port targetPort, ElementGraf inElementGraf, ElementGraf outElemGraf)
+        : base(Id)
+    {
+        if (sourcePort.TypePort == targetPort.TypePort)
+            throw new TypePortConnectionExeption(this, sourcePort, targetPort);
+
+        if (inElementGraf == outElemGraf)
+            throw new EqvelElementGrafExeption(this, inElementGraf);
+
+        SourcePort = sourcePort ?? throw new ConnectionNullExeption(this, nameof(sourcePort), typeof(Port));
+        TargetPort = targetPort ?? throw new ConnectionNullExeption(this, nameof(targetPort), typeof(Port));
+        OutElementGraf = outElemGraf ?? throw new ConnectionNullExeption(this, nameof(outElemGraf), typeof(ElementGraf));
+        InElementGraf = inElementGraf ?? throw new ConnectionNullExeption(this, nameof(inElementGraf), typeof(ElementGraf));
+    }
+
     /// <summary>
     /// Обновляет входящее соединение (источник).
     /// </summary>
@@ -76,7 +91,7 @@ public class Connection : Entity<Guid>
     /// если тип нового порта совпадает с типом целевого порта.</exception>
     /// <exception cref="EqvelElementGrafExeption">Выбрасывается, 
     /// если новый элемент совпадает с текущим входящим элементом.</exception>
-    public void UpdateInConnection(ElementGraf element, Port port)
+    public bool UpdateInConnection(ElementGraf element, Port port)
     {
         if (port is null)
             throw new ConnectionNullExeption(this, nameof(port), typeof(Port));
@@ -92,6 +107,7 @@ public class Connection : Entity<Guid>
 
         InElementGraf = element;
         SourcePort = port;
+        return true;
     }
 
     /// <summary>
@@ -105,7 +121,7 @@ public class Connection : Entity<Guid>
     /// если тип нового порта совпадает с типом исходного порта.</exception>
     /// <exception cref="EqvelElementGrafExeption">Выбрасывается, 
     /// если новый элемент совпадает с текущим исходящим элементом.</exception>
-    public void UpdateOutConnection(ElementGraf element, Port port)
+    public bool UpdateOutConnection(ElementGraf element, Port port)
     {
         if (port is null)
             throw new ConnectionNullExeption(this, nameof(port), typeof(Port));
@@ -121,6 +137,7 @@ public class Connection : Entity<Guid>
 
         OutElementGraf = element;
         TargetPort = port;
+        return true;
     }
 
     /// <summary>

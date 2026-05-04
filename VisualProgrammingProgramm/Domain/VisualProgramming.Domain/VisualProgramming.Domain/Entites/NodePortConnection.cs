@@ -42,17 +42,28 @@ public class NodePortConnection : Entity<Guid>
         Port = default;
     }
 
+    protected NodePortConnection(Guid Id, BaseNode node, Port port)
+        : base(Id)
+    {
+        Node = node ?? throw new NodePortConnectionNullConnection(this, nameof(node), typeof(Node));
+        Port = port ?? throw new NodePortConnectionNullConnection(this, nameof(port), typeof(Port));
+
+        Node.AddNodePortConnection(this);
+        Port.AddNodePortConnection(this);
+    }
+
     /// <summary>
     /// Обновляет узел в связи.
     /// </summary>
     /// <param name="node">Новый узел.</param>
     /// <exception cref="NodePortConnectionNullConnection">Выбрасывается,
     /// если node равен null.</exception>
-    public void UpdateNode(BaseNode node)
+    public bool UpdateNode(BaseNode node)
     {
         Node!.RemoveNodePortConnection(this);
         Node = node ?? throw new NodePortConnectionNullConnection(this, nameof(node), typeof(Node));
         Node.AddNodePortConnection(this);
+        return true;
     }
 
     /// <summary>
@@ -61,11 +72,12 @@ public class NodePortConnection : Entity<Guid>
     /// <param name="port">Новый порт.</param>
     /// <exception cref="NodePortConnectionNullConnection">Выбрасывается,
     /// если port равен null.</exception>
-    public void UpdatePort(Port port)
+    public bool UpdatePort(Port port)
     {
         Port!.RemoveNodePortConnection(this);
         Port = port ?? throw new NodePortConnectionNullConnection(this, nameof(port), typeof(Port));
         Port.AddNodePortConnection(this);
+        return true;
     }
 
     /// <summary>

@@ -34,6 +34,9 @@ public class Graf : Entity<Guid>
     protected Graf() : base(Guid.NewGuid())
         => Project = default!;
 
+    protected Graf(Guid Id, Project project) : base(Id)
+       => Project = project ?? throw new GrafNullExeption(this, nameof(project), typeof(Project));
+
     /// <summary>
     /// Определяет, содержит ли граф указанный проект.
     /// </summary>
@@ -49,8 +52,11 @@ public class Graf : Entity<Guid>
     /// <param name="project">Новый проект.</param>
     /// <exception cref="GrafNullExeption">Выбрасывается,
     /// если project равен null.</exception>
-    public void UpdateProject(Project project)
-        => Project = project ?? throw new GrafNullExeption(this, nameof(project), typeof(Project));
+    public bool UpdateProject(Project project)
+    {
+        Project = project ?? throw new GrafNullExeption(this, nameof(project), typeof(Project));
+        return true;
+    }
 
     /// <summary>
     /// Добавляет элемент в граф.
@@ -58,15 +64,16 @@ public class Graf : Entity<Guid>
     /// <param name="element">Добавляемый элемент графа.</param>
     /// <exception cref="GrafNullExeption">Выбрасывается,
     /// если element равен null.</exception>
-    public void AddElement(ElementGraf element)
+    public bool AddElement(ElementGraf element)
     {
         if (element is null)
             throw new GrafNullExeption(this, nameof(element), typeof(ElementGraf));
 
         if (elementsGraf.Contains(element))
-            return;
+            return false;
 
         elementsGraf.Add(element);
+        return true;
     }
 
     /// <summary>
@@ -76,7 +83,7 @@ public class Graf : Entity<Guid>
     /// <exception cref="GrafContainmentException">Выбрасывается,
     /// если элемент не принадлежит графу или граф не является 
     /// родительским для элемента.</exception>
-    public void RemoveElement(ElementGraf element)
+    public bool RemoveElement(ElementGraf element)
     {
         if (!elementsGraf.Contains(element))
             throw new GrafContainmentException(this, element);
@@ -85,5 +92,6 @@ public class Graf : Entity<Guid>
             throw new GrafContainmentException(element, this);
 
         elementsGraf.Remove(element);
+        return true;
     }
 }

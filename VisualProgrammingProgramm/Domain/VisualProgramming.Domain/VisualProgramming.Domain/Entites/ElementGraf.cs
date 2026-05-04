@@ -83,18 +83,31 @@ public class ElementGraf : Entity<Guid>
         PositionY = default;
     }
 
+    protected ElementGraf(Guid Id, BaseNode baseNode, LevelOfDepth levelLevelOfDepthOperation, bool isModul,
+        Graf graf, double positionX, double positionY)
+        : base(Id)
+    {
+        Node = baseNode ?? throw new ElementGrafNullExeption(this, nameof(baseNode), typeof(BaseNode));
+        LevelLevelOfDepthOperation = levelLevelOfDepthOperation;
+        IsModul = isModul;
+        ParentGraf = graf ?? throw new ElementGrafNullExeption(this, nameof(graf), typeof(Graf));
+        PositionX = positionX;
+        PositionY = positionY;
+    }
+
     /// <summary>
     /// Обновляет базовый узел элемента графа.
     /// </summary>
     /// <param name="node">Новый базовый узел.</param>
     /// <exception cref="ElementGrafNullExeption">Выбрасывается, 
     /// если node равен null.</exception>
-    public void UpdateNode(BaseNode node)
+    public bool UpdateNode(BaseNode node)
     {
         if (node is null)
             throw new ElementGrafNullExeption(this, nameof(node), typeof(BaseNode));
 
         Node = node;
+        return true;
     }
 
     /// <summary>
@@ -102,10 +115,11 @@ public class ElementGraf : Entity<Guid>
     /// </summary>
     /// <param name="positionX">Новая координата X.</param>
     /// <param name="positionY">Новая координата Y.</param>
-    public void UpdatePosition(double positionX, double positionY)
+    public bool UpdatePosition(double positionX, double positionY)
     {
         PositionX = positionX;
         PositionY = positionY;
+        return true;
     }
 
     /// <summary>
@@ -114,15 +128,22 @@ public class ElementGraf : Entity<Guid>
     /// <param name="graf">Новый родительский граф.</param>
     /// <exception cref="ElementGrafNullExeption">Выбрасывается,
     /// если graf равен null.</exception>
-    public void UpdateGraf(Graf graf)
-        => ParentGraf = graf ?? throw new ElementGrafNullExeption(this, nameof(graf), typeof(Graf));
+    public bool UpdateGraf(Graf graf)
+    {
+        ParentGraf = graf ?? throw new ElementGrafNullExeption(this, nameof(graf), typeof(Graf));
+        return true;
+    }
+
 
     /// <summary>
     /// Обновляет уровень глубины операции.
     /// </summary>
     /// <param name="newLevel">Новый уровень глубины.</param>
-    public void UpdateLevelOfDepth(LevelOfDepth newLevel)
-        => LevelLevelOfDepthOperation = newLevel;
+    public bool UpdateLevelOfDepth(LevelOfDepth newLevel)
+    {
+        LevelLevelOfDepthOperation = newLevel;
+        return true;
+    }
 
     /// <summary>
     /// Определяет, содержит ли этот элемент указанный 
@@ -138,15 +159,16 @@ public class ElementGraf : Entity<Guid>
     /// Добавляет соединение к элементу графа.
     /// </summary>
     /// <param name="connection">Добавляемое соединение.</param>
-    public void AddConnection(Connection connection)
+    public bool AddConnection(Connection connection)
     {
         if (connection is null)
             throw new ConnectionNullExeption(this, nameof(connection), typeof(Connection));
 
         if (_elementGrafConnection.Contains(connection))
-            return;
+            return false;
 
         _elementGrafConnection.Add(connection);
+        return true;
     }
 
     /// <summary>
@@ -156,7 +178,7 @@ public class ElementGraf : Entity<Guid>
     /// <exception cref="ConnectionContainmentExeption">Выбрасывается, 
     /// если соединение не принадлежит этому элементу или элемент не 
     /// участвует в соединении.</exception>
-    public void RemuveConnection(Connection connection)
+    public bool RemuveConnection(Connection connection)
     {
         if (!_elementGrafConnection.Contains(connection))
             throw new ConnectionContainmentExeption(this, connection);
@@ -165,5 +187,6 @@ public class ElementGraf : Entity<Guid>
             throw new ConnectionContainmentExeption(connection, this);
 
         _elementGrafConnection.Remove(connection);
+        return true;
     }
 }

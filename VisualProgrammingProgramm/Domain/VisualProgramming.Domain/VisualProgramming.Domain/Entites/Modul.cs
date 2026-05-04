@@ -23,4 +23,7 @@ public class Modul : BaseNode
         base(name) => GrafOperation = grafOPeration;
 
     protected Modul() : base(default!) => GrafOperation = default!;
+
+    protected Modul(Guid Id, Name name, Graf grafOPeration) :
+        base(Id, name) => GrafOperation = grafOPeration;
 }

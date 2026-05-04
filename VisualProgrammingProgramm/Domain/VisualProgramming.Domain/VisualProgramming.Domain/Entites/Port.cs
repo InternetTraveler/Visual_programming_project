@@ -56,21 +56,30 @@ public class Port : Entity<Guid>
         Description = default!;
     }
 
+    protected Port(Guid Id, BaseNode node, TypePort typePort, string description)
+        : base(Id)
+    {
+        Node = node ?? throw new PortNullExeption(this, nameof(node), typeof(Node));
+        TypePort = typePort;
+        Description = description;
+    }
+
     /// <summary>
     /// Добавляет связь узла с портом в коллекцию порта.
     /// </summary>
     /// <param name="_nodePortConnection">Добавляемая связь.</param>
     /// <exception cref="PortNullExeption">Выбрасывается,
     /// если _nodePortConnection равен null.</exception>
-    public void AddNodePortConnection(NodePortConnection _nodePortConnection)
+    public bool AddNodePortConnection(NodePortConnection _nodePortConnection)
     {
         if (_nodePortConnection is null)
             throw new PortNullExeption(this, nameof(_nodePortConnection), typeof(NodePortConnection));
 
         if (nodePortConnections.Contains(_nodePortConnection))
-            return;
+            return false;
 
         nodePortConnections.Add(_nodePortConnection);
+        return true;
     }
 
     /// <summary>
@@ -79,7 +88,7 @@ public class Port : Entity<Guid>
     /// <param name="_nodePortConnection">Удаляемая связь.</param>
     /// <exception cref="GrafContainmentException">Выбрасывается,
     /// если связь не принадлежит порту или порт не участвует в связи.</exception>
-    public void RemoveNodePortConnection(NodePortConnection _nodePortConnection)
+    public bool RemoveNodePortConnection(NodePortConnection _nodePortConnection)
     {
         if (!_nodePortConnection.IsContainPort(this))
             throw new GrafContainmentException(this, _nodePortConnection);
@@ -88,5 +97,6 @@ public class Port : Entity<Guid>
             throw new GrafContainmentException(_nodePortConnection, this);
 
         nodePortConnections.Remove(_nodePortConnection);
+        return true;
     }
 }
