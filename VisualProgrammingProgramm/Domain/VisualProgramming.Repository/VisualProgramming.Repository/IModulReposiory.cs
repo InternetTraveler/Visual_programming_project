@@ -13,14 +13,6 @@ namespace VisualProgramming.Repository;
 /// </remarks>
 public interface IModulReposiory : IRepository<Modul, Guid>
 {
-    /// <summary>
-    /// Асинхронно получает модуль по его уникальному идентификатору.
-    /// </summary>
-    /// <param name="id">Идентификатор модуля.</param>
-    /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>
-    /// Найденный модуль, или <c>null</c>, если модуль с указанным 
-    /// идентификатором не существует.
-    /// </returns>
-    Task<Modul?> GetModulByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<Graf?> GetGrafByIdModulAsync(Guid id, CancellationToken cancellationToken);
+    Task<Port?> GetPortByIdModulAsync(Guid id, CancellationToken cancellationToken);
 }

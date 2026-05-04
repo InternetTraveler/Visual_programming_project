@@ -9,13 +9,5 @@ namespace VisualProgramming.Repository;
 /// </summary>
 public interface INodeRepository : IRepository<Node, Guid>
 {
-    /// <summary>
-    /// Асинхронно получает узел по его уникальному идентификатору.
-    /// </summary>
-    /// <param name="id">Идентификатор узла.</param>
-    /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>
-    /// Найденный узел, или <c>null</c>, если узел с указанным идентификатором не существует.
-    /// </returns>
-    Task<Node?> GetNodeByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<Port?> GetPortByIdNodeAsync(Guid id, CancellationToken cancellationToken);
 }

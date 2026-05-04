@@ -9,13 +9,5 @@ namespace VisualProgramming.Repository;
 /// </summary>
 public interface IConnectionRepository : IRepository<Connection, Guid>
 {
-    /// <summary>
-    /// Асинхронно получает связь по её уникальному идентификатору.
-    /// </summary>
-    /// <param name="id">Идентификатор связи.</param>
-    /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>
-    /// Найденная связь, или <c>null</c>, если связь с указанным идентификатором не существует.
-    /// </returns>
-    Task<Connection?> GetConnectionByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<Connection?> GetElementGrafByIdConnectionAsync(Guid id, CancellationToken cancellationToken);
 }

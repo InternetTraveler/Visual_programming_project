@@ -9,13 +9,5 @@ namespace VisualProgramming.Repository;
 /// </summary>
 public interface IProjectRepository : IRepository<Project, Guid>
 {
-    /// <summary>
-    /// Асинхронно получает проект по его уникальному идентификатору.
-    /// </summary>
-    /// <param name="id">Идентификатор проекта.</param>
-    /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>
-    /// Найденный проект, или <c>null</c>, если проект с указанным идентификатором не существует.
-    /// </returns>
-    Task<Project?> GetProjectByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<Graf?> GetGrafByIdProjectAsync(Guid id, CancellationToken cancellationToken);
 }

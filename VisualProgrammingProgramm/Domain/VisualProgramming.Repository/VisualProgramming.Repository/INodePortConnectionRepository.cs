@@ -1,4 +1,5 @@
-﻿using VisualProgramming.Domain.Entites;
+﻿using VisualProgramming.Domain.Base;
+using VisualProgramming.Domain.Entites;
 using VisualProgramming.Repository.Base;
 
 namespace VisualProgramming.Repository;
@@ -14,6 +15,7 @@ namespace VisualProgramming.Repository;
 /// </remarks>
 public interface INodePortConnectionRepository : IRepository<Connection, Guid>
 {
-    // На данный момент специфические методы отсутствуют.
-    // При необходимости их можно добавить здесь.
+    Task<BaseNode?> GetNodeAndModulByIdNodePortConnectionAsync
+        (Guid id, CancellationToken cancellationToken);
+    Task<Port?> GetPortByIdNodePortConnectionAsync(Guid id, CancellationToken cancellationToken);
 }
