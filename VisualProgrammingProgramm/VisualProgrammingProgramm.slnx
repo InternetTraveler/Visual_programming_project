@@ -1,0 +1,26 @@
+<Solution>
+  <Folder Name="/Aplication/" />
+  <Folder Name="/Aplication/VisualProgramming.Models/">
+    <Project Path="Aplication/VisualProgramming.Models/VisualProgramming.Models.csproj" Id="b2452791-a6af-453f-bda7-182c9bdbe12f" />
+  </Folder>
+  <Folder Name="/Aplication/VisualProgramming.Services/">
+    <Project Path="Aplication/VisualProgramming.Abstraction/VisualProgramming.Services.csproj" Id="30d36f62-362c-4a89-b2a9-0d6c22e004cb" />
+  </Folder>
+  <Folder Name="/Domain/" />
+  <Folder Name="/Domain/VisualProgramming.Domain/">
+    <Project Path="Domain/VisualProgramming.Domain/VisualProgramming.Domain/VisualProgramming.Domain.csproj" />
+  </Folder>
+  <Folder Name="/Domain/VisualProgramming.Repository/">
+    <Project Path="Domain/VisualProgramming.Repository/VisualProgramming.Repository/VisualProgramming.Repository.csproj" Id="0fc29f2a-da30-4c69-b9df-1585d0361a4a" />
+  </Folder>
+  <Folder Name="/Domain/VisualProgramming.TestDomainApp/">
+    <Project Path="VisualProgramming.TestDomainApp/VisualProgramming.TestDomainApp.csproj" Id="67ff8acc-88e5-4818-a22d-75ca9f50f38d" />
+  </Folder>
+  <Folder Name="/Domain/VisualProgramming.ValueObject/">
+    <Project Path="Domain/VisualProgramming.ValueObject/VisualProgramming.ValueObject/VisualProgramming.ValueObject.csproj" Id="00e1d9c1-8263-4125-8201-ef7d9116f01e" />
+  </Folder>
+  <Folder Name="/Infrastructure/">
+    <Project Path="VisualProgramming.Infrastructure/VisualProgramming.Infrastructure.csproj" Id="55bf443a-83c6-49f6-8de4-b61a8c0e38d9" />
+  </Folder>
+  <Project Path="VisualProgrammingProgramm/VisualProgrammingProgramm.csproj" />
+</Solution>

@@ -1,0 +1,108 @@
+﻿using VisualProgramming.Domain.Base;
+using VisualProgramming.Domain.Exceptions;
+using VisualProgramming.Domain.Exceptions.NullExeption;
+
+namespace VisualProgramming.Domain.Entites;
+
+/// <summary>
+/// Представляет граф, содержащий коллекцию элементов графа (узлов) и связанный с проектом.
+/// </summary>
+/// <remarks>
+/// Graf является контейнером для элементов графа (ElementGraf) и обеспечивает
+/// управление их жизненным циклом в контексте конкретного проекта.
+/// </remarks>
+public class Graf : Entity<Guid>
+{
+    /// <summary>
+    /// Получает проект, содержащий этот граф.
+    /// </summary>
+    public Project Project { get; private set; }
+
+    private ICollection<ElementGraf> elementsGraf = [];
+
+    /// <summary>
+    /// Получает коллекцию элементов графа, принадлежащих этому графу.
+    /// </summary>
+    public IReadOnlyCollection<ElementGraf> ElementsGraf => elementsGraf.ToList().AsReadOnly();
+
+    /// <summary>
+    /// Инициализирует новый экземпляр графа.
+    /// </summary>
+    /// <param name="project">Проект, которому принадлежит граф.</param>
+    /// <exception cref="GrafNullExeption">Выбрасывается, если project равен null.</exception>
+    public Graf(Project project) : base(Guid.NewGuid())
+       => Project = project ?? throw new GrafNullExeption(this, nameof(project), typeof(Project));
+
+    /// <summary>
+    /// Инициализирует новый экземпляр графа для десериализации.
+    /// </summary>
+    protected Graf() : base(Guid.NewGuid())
+        => Project = default!;
+
+    /// <summary>
+    /// Инициализирует новый экземпляр графа с указанным идентификатором.
+    /// </summary>
+    /// <param name="Id">Уникальный идентификатор графа.</param>
+    /// <param name="project">Проект, которому принадлежит граф.</param>
+    /// <exception cref="GrafNullExeption">Выбрасывается, если project равен null.</exception>
+    protected Graf(Guid Id, Project project) : base(Id)
+       => Project = project ?? throw new GrafNullExeption(this, nameof(project), typeof(Project));
+
+    /// <summary>
+    /// Определяет, содержит ли граф указанный проект.
+    /// </summary>
+    /// <param name="project">Проект для проверки.</param>
+    /// <returns>true, если указанный проект связан с графом; иначе false.</returns>
+    public bool IsContainsProject(Project project)
+        => project == Project;
+
+    /// <summary>
+    /// Обновляет проект, связанный с графом.
+    /// </summary>
+    /// <param name="project">Новый проект.</param>
+    /// <returns>true, если обновление выполнено успешно.</returns>
+    /// <exception cref="GrafNullExeption">Выбрасывается, если project равен null.</exception>
+    public bool UpdateProject(Project project)
+    {
+        Project = project ?? throw new GrafNullExeption(this, nameof(project), typeof(Project));
+        return true;
+    }
+
+    /// <summary>
+    /// Добавляет элемент в граф.
+    /// </summary>
+    /// <param name="element">Добавляемый элемент графа.</param>
+    /// <returns>true, если элемент успешно добавлен; false, если элемент уже существует в графе.</returns>
+    /// <exception cref="GrafNullExeption">Выбрасывается, если element равен null.</exception>
+    public bool AddElement(ElementGraf element)
+    {
+        if (element is null)
+            throw new GrafNullExeption(this, nameof(element), typeof(ElementGraf));
+
+        if (elementsGraf.Contains(element))
+            return false;
+
+        elementsGraf.Add(element);
+        return true;
+    }
+
+    /// <summary>
+    /// Удаляет элемент из графа.
+    /// </summary>
+    /// <param name="element">Удаляемый элемент графа.</param>
+    /// <returns>true, если удаление выполнено успешно.</returns>
+    /// <exception cref="GrafContainmentException">
+    /// Выбрасывается, если элемент не принадлежит графу или граф не является родительским для элемента.
+    /// </exception>
+    public bool RemoveElement(ElementGraf element)
+    {
+        if (!elementsGraf.Contains(element))
+            throw new GrafContainmentException(this, element);
+
+        if (!element.IsContainsGraf(this))
+            throw new GrafContainmentException(element, this);
+
+        elementsGraf.Remove(element);
+        return true;
+    }
+}
