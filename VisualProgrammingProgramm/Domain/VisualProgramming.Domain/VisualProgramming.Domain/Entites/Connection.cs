@@ -7,41 +7,43 @@ namespace VisualProgramming.Domain.Entites;
 /// <summary>
 /// Представляет соединение между двумя портами двух разных элементов графа.
 /// </summary>
+/// <remarks>
+/// Соединение всегда связывает входной порт с выходным портом.
+/// InElementGraf и SourcePort представляют источник (выход),
+/// OutElementGraf и TargetPort представляют приёмник (вход).
+/// </remarks>
 public class Connection : Entity<Guid>
 {
     /// <summary>
-    /// Получает элемент графа, из которого исходит соединение.
+    /// Получает элемент графа, из которого исходит соединение (источник).
     /// </summary>
     public ElementGraf InElementGraf { get; private set; }
 
     /// <summary>
-    /// Получает исходный порт соединения.
+    /// Получает исходный порт соединения (порт источника).
     /// </summary>
     public Port? SourcePort { get; private set; }
 
     /// <summary>
-    /// Получает элемент графа, в которое входит соединение.
+    /// Получает элемент графа, в который входит соединение (приёмник).
     /// </summary>
     public ElementGraf OutElementGraf { get; private set; }
 
     /// <summary>
-    /// Получает целевой порт соединения.
+    /// Получает целевой порт соединения (порт приёмника).
     /// </summary>
     public Port? TargetPort { get; private set; }
 
     /// <summary>
     /// Инициализирует новый экземпляр соединения между двумя портами.
     /// </summary>
-    /// <param name="sourcePort">Исходный порт.</param>
-    /// <param name="targetPort">Целевой порт.</param>
+    /// <param name="sourcePort">Исходный порт (порт источника).</param>
+    /// <param name="targetPort">Целевой порт (порт приёмника).</param>
     /// <param name="inElementGraf">Элемент графа-источник.</param>
     /// <param name="outElemGraf">Элемент графа-приёмник.</param>
-    /// <exception cref="TypePortConnectionExeption">Выбрасывается,
-    /// если типы портов совпадают.</exception>
-    /// <exception cref="EqvelElementGrafExeption">Выбрасывается, 
-    /// если оба элемента графа одинаковы.</exception>
-    /// <exception cref="ConnectionNullExeption">Выбрасывается, 
-    /// если любой из параметров равен null.</exception>
+    /// <exception cref="TypePortConnectionExeption">Выбрасывается, если типы портов совпадают.</exception>
+    /// <exception cref="EqvelElementGrafExeption">Выбрасывается, если оба элемента графа одинаковы.</exception>
+    /// <exception cref="ConnectionNullExeption">Выбрасывается, если любой из параметров равен null.</exception>
     public Connection(Port sourcePort, Port targetPort, ElementGraf inElementGraf, ElementGraf outElemGraf)
         : base(Guid.NewGuid())
     {
@@ -57,6 +59,9 @@ public class Connection : Entity<Guid>
         InElementGraf = inElementGraf ?? throw new ConnectionNullExeption(this, nameof(inElementGraf), typeof(ElementGraf));
     }
 
+    /// <summary>
+    /// Инициализирует новый экземпляр соединения для десериализации.
+    /// </summary>
     protected Connection() : base(Guid.NewGuid())
     {
         SourcePort = default!;
@@ -65,6 +70,17 @@ public class Connection : Entity<Guid>
         InElementGraf = default!;
     }
 
+    /// <summary>
+    /// Инициализирует новый экземпляр соединения с указанным идентификатором.
+    /// </summary>
+    /// <param name="Id">Уникальный идентификатор соединения.</param>
+    /// <param name="sourcePort">Исходный порт (порт источника).</param>
+    /// <param name="targetPort">Целевой порт (порт приёмника).</param>
+    /// <param name="inElementGraf">Элемент графа-источник.</param>
+    /// <param name="outElemGraf">Элемент графа-приёмник.</param>
+    /// <exception cref="TypePortConnectionExeption">Выбрасывается, если типы портов совпадают.</exception>
+    /// <exception cref="EqvelElementGrafExeption">Выбрасывается, если оба элемента графа одинаковы.</exception>
+    /// <exception cref="ConnectionNullExeption">Выбрасывается, если любой из параметров равен null.</exception>
     protected Connection(Guid Id, Port sourcePort, Port targetPort, ElementGraf inElementGraf, ElementGraf outElemGraf)
         : base(Id)
     {
@@ -85,12 +101,10 @@ public class Connection : Entity<Guid>
     /// </summary>
     /// <param name="element">Новый элемент графа-источник.</param>
     /// <param name="port">Новый исходный порт.</param>
-    /// <exception cref="ConnectionNullExeption">Выбрасывается, 
-    /// если element или port равен null.</exception>
-    /// <exception cref="TypePortConnectionExeption">Выбрасывается, 
-    /// если тип нового порта совпадает с типом целевого порта.</exception>
-    /// <exception cref="EqvelElementGrafExeption">Выбрасывается, 
-    /// если новый элемент совпадает с текущим входящим элементом.</exception>
+    /// <returns>true, если обновление выполнено успешно.</returns>
+    /// <exception cref="ConnectionNullExeption">Выбрасывается, если element или port равен null.</exception>
+    /// <exception cref="TypePortConnectionExeption">Выбрасывается, если тип нового порта совпадает с типом целевого порта.</exception>
+    /// <exception cref="EqvelElementGrafExeption">Выбрасывается, если новый элемент совпадает с текущим входящим элементом.</exception>
     public bool UpdateInConnection(ElementGraf element, Port port)
     {
         if (port is null)
@@ -115,12 +129,10 @@ public class Connection : Entity<Guid>
     /// </summary>
     /// <param name="element">Новый элемент графа-приёмник.</param>
     /// <param name="port">Новый целевой порт.</param>
-    /// <exception cref="ConnectionNullExeption">Выбрасывается, 
-    /// если element или port равен null.</exception>
-    /// <exception cref="TypePortConnectionExeption">Выбрасывается, 
-    /// если тип нового порта совпадает с типом исходного порта.</exception>
-    /// <exception cref="EqvelElementGrafExeption">Выбрасывается, 
-    /// если новый элемент совпадает с текущим исходящим элементом.</exception>
+    /// <returns>true, если обновление выполнено успешно.</returns>
+    /// <exception cref="ConnectionNullExeption">Выбрасывается, если element или port равен null.</exception>
+    /// <exception cref="TypePortConnectionExeption">Выбрасывается, если тип нового порта совпадает с типом исходного порта.</exception>
+    /// <exception cref="EqvelElementGrafExeption">Выбрасывается, если новый элемент совпадает с текущим исходящим элементом.</exception>
     public bool UpdateOutConnection(ElementGraf element, Port port)
     {
         if (port is null)
@@ -144,8 +156,7 @@ public class Connection : Entity<Guid>
     /// Определяет, содержит ли соединение указанный элемент графа.
     /// </summary>
     /// <param name="element">Элемент графа для проверки.</param>
-    /// <returns>true, если элемент является источником или 
-    /// приёмником соединения; иначе false.</returns>
+    /// <returns>true, если элемент является источником или приёмником соединения; иначе false.</returns>
     public bool IsContainsElementGraf(ElementGraf element)
         => element == InElementGraf || element == OutElementGraf;
 }

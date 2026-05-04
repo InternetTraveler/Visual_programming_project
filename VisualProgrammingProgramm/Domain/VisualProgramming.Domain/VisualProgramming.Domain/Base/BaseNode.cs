@@ -36,7 +36,7 @@ public abstract class BaseNode : Entity<Guid>
     /// <value>Коллекция соединений портов только для чтения.</value>
     /// <remarks>Используйте этот метод для безопасного доступа 
     /// к соединениям без возможности их изменения.</remarks>
-    public IReadOnlyCollection<NodePortConnection> NodePortConnections => 
+    public IReadOnlyCollection<NodePortConnection> NodePortConnections =>
         nodePortConnections.ToList().AsReadOnly();
 
     /// <summary>
@@ -44,28 +44,38 @@ public abstract class BaseNode : Entity<Guid>
     /// </summary>
     /// <param name="name">Имя узла, представленное объектом Name.</param>
     /// <remarks>
-    /// При создании узла автоматически генерируется 
-    /// новый уникальный идентификатор (Guid).
+    /// При создании узла автоматически генерируется новый уникальный идентификатор (Guid).
     /// </remarks>
     public BaseNode(Name name)
         : base(Guid.NewGuid()) => Name = name;
 
+    /// <summary>
+    /// Инициализирует новый экземпляр класса BaseNode без имени.
+    /// </summary>
+    /// <remarks>
+    /// Используется только для десериализации и ORM.
+    /// При создании узла автоматически генерируется новый уникальный идентификатор (Guid).
+    /// </remarks>
     protected BaseNode()
         : base(Guid.NewGuid()) => Name = default!;
 
+    /// <summary>
+    /// Инициализирует новый экземпляр класса BaseNode с указанным идентификатором и именем.
+    /// </summary>
+    /// <param name="Id">Уникальный идентификатор узла.</param>
+    /// <param name="name">Имя узла, представленное объектом Name.</param>
+    /// <remarks>Используется для восстановления сущности из базы данных.</remarks>
     protected BaseNode(Guid Id, Name name)
         : base(Id) => Name = name;
 
     /// <summary>
     /// Добавляет новое соединение порта к узлу.
     /// </summary>
-    /// <param name="_nodePortConnection">Соединение порта 
-    /// узла для добавления.</param>
-    /// <exception cref="NodeNullExeption">Выбрасывается, 
-    /// если переданное соединение порта является null.</exception>
+    /// <param name="_nodePortConnection">Соединение порта узла для добавления.</param>
+    /// <returns>true, если соединение успешно добавлено; false, если соединение уже существует.</returns>
+    /// <exception cref="NodeNullExeption">Выбрасывается, если переданное соединение порта является null.</exception>
     /// <remarks>
-    /// Метод проверяет переданное соединение на null 
-    /// перед добавлением в коллекцию.
+    /// Метод проверяет переданное соединение на null перед добавлением в коллекцию.
     /// </remarks>
     public bool AddNodePortConnection(NodePortConnection _nodePortConnection)
     {
@@ -83,12 +93,12 @@ public abstract class BaseNode : Entity<Guid>
     /// <summary>
     /// Удаляет существующее соединение порта из узла.
     /// </summary>
-    /// <param name="_nodePortConnection">Соединение порта 
-    /// узла для удаления.</param>
-    /// <exception cref="GrafContainmentException"/>
+    /// <param name="_nodePortConnection">Соединение порта узла для удаления.</param>
+    /// <exception cref="GrafContainmentException">
+    /// Выбрасывается, если соединение не найдено в коллекции узла или соединение не содержит данный узел.
+    /// </exception>
     /// <remarks>
-    /// Перед удалением метод проверяет наличие соединения 
-    /// в коллекции и принадлежность соединения данному узлу.
+    /// Перед удалением метод проверяет наличие соединения в коллекции и принадлежность соединения данному узлу.
     /// </remarks>
     public void RemoveNodePortConnection(NodePortConnection _nodePortConnection)
     {

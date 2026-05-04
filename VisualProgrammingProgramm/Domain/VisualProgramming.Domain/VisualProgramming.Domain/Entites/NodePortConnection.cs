@@ -6,6 +6,11 @@ namespace VisualProgramming.Domain.Entites;
 /// <summary>
 /// Представляет связь между узлом и портом.
 /// </summary>
+/// <remarks>
+/// NodePortConnection является связующим звеном между BaseNode и Port.
+/// При создании автоматически добавляет себя в коллекции как узла, так и порта.
+/// Это обеспечивает двунаправленную навигацию между узлами и портами.
+/// </remarks>
 public class NodePortConnection : Entity<Guid>
 {
     /// <summary>
@@ -20,12 +25,13 @@ public class NodePortConnection : Entity<Guid>
 
     /// <summary>
     /// Инициализирует новый экземпляр связи между узлом и портом.
-    /// Автоматически добавляет связь в коллекции узла и порта.
     /// </summary>
-    /// <param name="node">Узел.</param>
-    /// <param name="port">Порт.</param>
-    /// <exception cref="NodePortConnectionNullConnection">Выбрасывается,
-    /// если node или port равен null.</exception>
+    /// <param name="node">Узел, который нужно связать.</param>
+    /// <param name="port">Порт, который нужно связать.</param>
+    /// <exception cref="NodePortConnectionNullConnection">Выбрасывается, если node или port равен null.</exception>
+    /// <remarks>
+    /// Конструктор автоматически добавляет созданную связь в коллекции узла и порта.
+    /// </remarks>
     public NodePortConnection(BaseNode node, Port port)
         : base(Guid.NewGuid())
     {
@@ -36,12 +42,22 @@ public class NodePortConnection : Entity<Guid>
         Port.AddNodePortConnection(this);
     }
 
+    /// <summary>
+    /// Инициализирует новый экземпляр связи для десериализации.
+    /// </summary>
     protected NodePortConnection() : base(Guid.NewGuid())
     {
         Node = default;
         Port = default;
     }
 
+    /// <summary>
+    /// Инициализирует новый экземпляр связи с указанным идентификатором.
+    /// </summary>
+    /// <param name="Id">Уникальный идентификатор связи.</param>
+    /// <param name="node">Узел, который нужно связать.</param>
+    /// <param name="port">Порт, который нужно связать.</param>
+    /// <exception cref="NodePortConnectionNullConnection">Выбрасывается, если node или port равен null.</exception>
     protected NodePortConnection(Guid Id, BaseNode node, Port port)
         : base(Id)
     {
@@ -56,8 +72,11 @@ public class NodePortConnection : Entity<Guid>
     /// Обновляет узел в связи.
     /// </summary>
     /// <param name="node">Новый узел.</param>
-    /// <exception cref="NodePortConnectionNullConnection">Выбрасывается,
-    /// если node равен null.</exception>
+    /// <returns>true, если обновление выполнено успешно.</returns>
+    /// <exception cref="NodePortConnectionNullConnection">Выбрасывается, если node равен null.</exception>
+    /// <remarks>
+    /// Метод автоматически удаляет связь из старого узла и добавляет в новый.
+    /// </remarks>
     public bool UpdateNode(BaseNode node)
     {
         Node!.RemoveNodePortConnection(this);
@@ -70,8 +89,11 @@ public class NodePortConnection : Entity<Guid>
     /// Обновляет порт в связи.
     /// </summary>
     /// <param name="port">Новый порт.</param>
-    /// <exception cref="NodePortConnectionNullConnection">Выбрасывается,
-    /// если port равен null.</exception>
+    /// <returns>true, если обновление выполнено успешно.</returns>
+    /// <exception cref="NodePortConnectionNullConnection">Выбрасывается, если port равен null.</exception>
+    /// <remarks>
+    /// Метод автоматически удаляет связь из старого порта и добавляет в новый.
+    /// </remarks>
     public bool UpdatePort(Port port)
     {
         Port!.RemoveNodePortConnection(this);
@@ -84,7 +106,7 @@ public class NodePortConnection : Entity<Guid>
     /// Определяет, содержит ли связь указанный узел.
     /// </summary>
     /// <param name="node">Узел для проверки.</param>
-    /// <returns>true, если узел связан; иначе false.</returns>
+    /// <returns>true, если узел связан с данной связью; иначе false.</returns>
     public bool IsContainNode(BaseNode node)
         => Node == node;
 
@@ -92,7 +114,7 @@ public class NodePortConnection : Entity<Guid>
     /// Определяет, содержит ли связь указанный порт.
     /// </summary>
     /// <param name="port">Порт для проверки.</param>
-    /// <returns>true, если порт связан; иначе false.</returns>
+    /// <returns>true, если порт связан с данной связью; иначе false.</returns>
     public bool IsContainPort(Port port)
         => Port == port;
 }

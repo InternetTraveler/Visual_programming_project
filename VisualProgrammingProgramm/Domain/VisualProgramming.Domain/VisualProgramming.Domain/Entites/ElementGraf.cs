@@ -6,14 +6,17 @@ using VisualProgramming.ValueObject;
 namespace VisualProgramming.Domain.Entites;
 
 /// <summary>
-/// Представляет элемент (узел) внутри графа, включая его 
-/// позицию, уровень вложенности и связи.
+/// Представляет элемент (узел) внутри графа, включая его позицию, уровень вложенности и связи.
 /// </summary>
+/// <remarks>
+/// ElementGraf является контейнером для BaseNode в контексте графа.
+/// Он добавляет пространственную информацию (позицию), уровень глубины операции
+/// и связь с родительским графом.
+/// </remarks>
 public class ElementGraf : Entity<Guid>
 {
     /// <summary>
-    /// Получает базовый узел (модуль или обычный узел),
-    /// связанный с этим элементом графа.
+    /// Получает базовый узел (модуль или обычный узел), связанный с этим элементом графа.
     /// </summary>
     public BaseNode? Node { get; private set; }
 
@@ -54,13 +57,12 @@ public class ElementGraf : Entity<Guid>
     /// Инициализирует новый экземпляр элемента графа.
     /// </summary>
     /// <param name="baseNode">Базовый узел.</param>
-    /// <param name="levelLevelOfDepthOperation">Уровень глубины.</param>
-    /// <param name="isModul">Является ли модулем.</param>
+    /// <param name="levelLevelOfDepthOperation">Уровень глубины операции.</param>
+    /// <param name="isModul">Определяет, является ли элемент модулем.</param>
     /// <param name="graf">Родительский граф.</param>
-    /// <param name="positionX">Координата X.</param>
-    /// <param name="positionY">Координата Y.</param>
-    /// <exception cref="ElementGrafNullExeption">Выбрасывается, 
-    /// если baseNode или graf равен null.</exception>
+    /// <param name="positionX">Координата X позиции элемента.</param>
+    /// <param name="positionY">Координата Y позиции элемента.</param>
+    /// <exception cref="ElementGrafNullExeption">Выбрасывается, если baseNode или graf равен null.</exception>
     public ElementGraf(BaseNode baseNode, LevelOfDepth levelLevelOfDepthOperation, bool isModul,
         Graf graf, double positionX, double positionY)
         : base(Guid.NewGuid())
@@ -73,6 +75,9 @@ public class ElementGraf : Entity<Guid>
         PositionY = positionY;
     }
 
+    /// <summary>
+    /// Инициализирует новый экземпляр элемента графа для десериализации.
+    /// </summary>
     protected ElementGraf() : base(Guid.NewGuid())
     {
         Node = default;
@@ -83,6 +88,17 @@ public class ElementGraf : Entity<Guid>
         PositionY = default;
     }
 
+    /// <summary>
+    /// Инициализирует новый экземпляр элемента графа с указанным идентификатором.
+    /// </summary>
+    /// <param name="Id">Уникальный идентификатор элемента графа.</param>
+    /// <param name="baseNode">Базовый узел.</param>
+    /// <param name="levelLevelOfDepthOperation">Уровень глубины операции.</param>
+    /// <param name="isModul">Определяет, является ли элемент модулем.</param>
+    /// <param name="graf">Родительский граф.</param>
+    /// <param name="positionX">Координата X позиции элемента.</param>
+    /// <param name="positionY">Координата Y позиции элемента.</param>
+    /// <exception cref="ElementGrafNullExeption">Выбрасывается, если baseNode или graf равен null.</exception>
     protected ElementGraf(Guid Id, BaseNode baseNode, LevelOfDepth levelLevelOfDepthOperation, bool isModul,
         Graf graf, double positionX, double positionY)
         : base(Id)
@@ -99,8 +115,8 @@ public class ElementGraf : Entity<Guid>
     /// Обновляет базовый узел элемента графа.
     /// </summary>
     /// <param name="node">Новый базовый узел.</param>
-    /// <exception cref="ElementGrafNullExeption">Выбрасывается, 
-    /// если node равен null.</exception>
+    /// <returns>true, если обновление выполнено успешно.</returns>
+    /// <exception cref="ElementGrafNullExeption">Выбрасывается, если node равен null.</exception>
     public bool UpdateNode(BaseNode node)
     {
         if (node is null)
@@ -115,6 +131,7 @@ public class ElementGraf : Entity<Guid>
     /// </summary>
     /// <param name="positionX">Новая координата X.</param>
     /// <param name="positionY">Новая координата Y.</param>
+    /// <returns>true, если обновление выполнено успешно.</returns>
     public bool UpdatePosition(double positionX, double positionY)
     {
         PositionX = positionX;
@@ -126,19 +143,19 @@ public class ElementGraf : Entity<Guid>
     /// Обновляет родительский граф элемента.
     /// </summary>
     /// <param name="graf">Новый родительский граф.</param>
-    /// <exception cref="ElementGrafNullExeption">Выбрасывается,
-    /// если graf равен null.</exception>
+    /// <returns>true, если обновление выполнено успешно.</returns>
+    /// <exception cref="ElementGrafNullExeption">Выбрасывается, если graf равен null.</exception>
     public bool UpdateGraf(Graf graf)
     {
         ParentGraf = graf ?? throw new ElementGrafNullExeption(this, nameof(graf), typeof(Graf));
         return true;
     }
 
-
     /// <summary>
     /// Обновляет уровень глубины операции.
     /// </summary>
     /// <param name="newLevel">Новый уровень глубины.</param>
+    /// <returns>true, если обновление выполнено успешно.</returns>
     public bool UpdateLevelOfDepth(LevelOfDepth newLevel)
     {
         LevelLevelOfDepthOperation = newLevel;
@@ -146,12 +163,10 @@ public class ElementGraf : Entity<Guid>
     }
 
     /// <summary>
-    /// Определяет, содержит ли этот элемент указанный 
-    /// граф в качестве родительского.
+    /// Определяет, содержит ли этот элемент указанный граф в качестве родительского.
     /// </summary>
     /// <param name="graf">Граф для проверки.</param>
-    /// <returns>true, если указанный граф является родительским;
-    /// иначе false.</returns>
+    /// <returns>true, если указанный граф является родительским; иначе false.</returns>
     public bool IsContainsGraf(Graf graf) =>
         graf == ParentGraf;
 
@@ -159,6 +174,8 @@ public class ElementGraf : Entity<Guid>
     /// Добавляет соединение к элементу графа.
     /// </summary>
     /// <param name="connection">Добавляемое соединение.</param>
+    /// <returns>true, если соединение успешно добавлено; false, если соединение уже существует.</returns>
+    /// <exception cref="ConnectionNullExeption">Выбрасывается, если connection равен null.</exception>
     public bool AddConnection(Connection connection)
     {
         if (connection is null)
@@ -175,9 +192,10 @@ public class ElementGraf : Entity<Guid>
     /// Удаляет соединение из элемента графа.
     /// </summary>
     /// <param name="connection">Удаляемое соединение.</param>
-    /// <exception cref="ConnectionContainmentExeption">Выбрасывается, 
-    /// если соединение не принадлежит этому элементу или элемент не 
-    /// участвует в соединении.</exception>
+    /// <returns>true, если удаление выполнено успешно.</returns>
+    /// <exception cref="ConnectionContainmentExeption">
+    /// Выбрасывается, если соединение не принадлежит этому элементу или элемент не участвует в соединении.
+    /// </exception>
     public bool RemuveConnection(Connection connection)
     {
         if (!_elementGrafConnection.Contains(connection))

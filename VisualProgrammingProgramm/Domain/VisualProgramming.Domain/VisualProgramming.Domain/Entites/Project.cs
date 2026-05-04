@@ -7,6 +7,11 @@ namespace VisualProgramming.Domain.Entites;
 /// <summary>
 /// Представляет проект, содержащий коллекцию графов.
 /// </summary>
+/// <remarks>
+/// Project является корневым контейнером в иерархии.
+/// Он объединяет все графы, которые используются в рамках одного проекта,
+/// и обеспечивает управление ими на верхнем уровне.
+/// </remarks>
 public class Project : Entity<Guid>
 {
     /// <summary>
@@ -14,7 +19,6 @@ public class Project : Entity<Guid>
     /// </summary>
     public Name Name { get; private set; }
 
-    // Навигационные свойства
     private ICollection<Graf> _grafs = [];
 
     /// <summary>
@@ -26,12 +30,20 @@ public class Project : Entity<Guid>
     /// Инициализирует новый экземпляр проекта.
     /// </summary>
     /// <param name="name">Имя проекта.</param>
-    public Project(Name name) : base(Guid.NewGuid()) 
+    public Project(Name name) : base(Guid.NewGuid())
         => Name = name;
 
+    /// <summary>
+    /// Инициализирует новый экземпляр проекта для десериализации.
+    /// </summary>
     protected Project() : base(Guid.NewGuid())
         => Name = default!;
 
+    /// <summary>
+    /// Инициализирует новый экземпляр проекта с указанным идентификатором.
+    /// </summary>
+    /// <param name="Id">Уникальный идентификатор проекта.</param>
+    /// <param name="name">Имя проекта.</param>
     protected Project(Guid Id, Name name) : base(Id)
         => Name = name;
 
@@ -39,8 +51,8 @@ public class Project : Entity<Guid>
     /// Добавляет граф в проект.
     /// </summary>
     /// <param name="graf">Добавляемый граф.</param>
-    /// <exception cref="Exception">Выбрасывается, если 
-    /// graf равен null.</exception>
+    /// <returns>true, если граф успешно добавлен; false, если граф уже существует в проекте.</returns>
+    /// <exception cref="GrafNullExeption">Выбрасывается, если graf равен null.</exception>
     public bool AddGraf(Graf graf)
     {
         if (graf is null)
@@ -57,14 +69,14 @@ public class Project : Entity<Guid>
     /// Удаляет граф из проекта.
     /// </summary>
     /// <param name="_graf">Удаляемый граф.</param>
-    /// <exception cref="Exception">Выбрасывается, если 
-    /// граф не найден в коллекции.</exception>
+    /// <returns>true, если удаление выполнено успешно.</returns>
+    /// <exception cref="InvalidOperationException">Выбрасывается, если граф не найден в коллекции проекта.</exception>
     public bool RemoveGraf(Graf _graf)
     {
-        var graf = _grafs.First(n => n == _graf);
+        var graf = _grafs.FirstOrDefault(n => n == _graf);
 
         if (graf is null)
-            throw new Exception();
+            throw new InvalidOperationException($"Граф с идентификатором '{_graf?.Id}' не найден в проекте.");
 
         _grafs.Remove(graf);
         return true;
