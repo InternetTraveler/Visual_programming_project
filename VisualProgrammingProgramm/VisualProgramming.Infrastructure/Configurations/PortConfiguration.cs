@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Globalization;
 using VisualProgramming.Domain.Entites;
 using VisualProgramming.Domain.Enum;
 using VisualProgramming.ValueObject;
+using VisualProgramming.ValueObject.Validais;
 
 
 namespace VisualProgramming.Configurations;
@@ -18,10 +19,15 @@ public class PortConfiguration : IEntityTypeConfiguration<Port>
         builder.Property(x => x.Description)
             .IsRequired()
             .HasConversion(des => des.Value, str => new Description(str))
-            .HasMaxLength(50);
+            .HasMaxLength(DescriptionValidator.MaxLenghts);
 
         builder.Property(x => x.TypePort)
-            .IsRequired(); // как конвертировать
+            .IsRequired();
+
+        builder.HasOne(p => p.Node)
+            .WithMany()
+            .HasForeignKey("NodeId")
+            .IsRequired();
 
         builder.HasMany<NodePortConnection>("nodePortConnections")
             .WithOne(x => x.Port)

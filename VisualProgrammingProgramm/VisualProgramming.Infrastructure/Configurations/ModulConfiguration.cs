@@ -13,7 +13,7 @@ public class ModulConfiguration : IEntityTypeConfiguration<Modul>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).IsRequired();
 
-        builder.HasOne(x => x.GrafOperation); //??????????
+        builder.HasOne(x => x.GrafOperation).WithMany().HasForeignKey("id_operation");
 
         builder.HasMany<NodePortConnection>("nodePortConnections")
             .WithOne(x => (Modul)x.Node!)

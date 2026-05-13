@@ -12,7 +12,9 @@ public class GrafConfiguration : IEntityTypeConfiguration<Graf>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).IsRequired();
 
-        builder.HasOne(x => x.Project).WithMany("_grafs");
+        builder.HasOne(x => x.Project).WithMany("_grafs")
+            .HasForeignKey("id_project")
+            .IsRequired();
 
         builder.HasMany<ElementGraf>("elementsGraf")
             .WithOne(x => x.ParentGraf)

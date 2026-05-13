@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using VisualProgramming.Domain.Entites;
+using VisualProgramming.Domain.Enum;
 
 
 namespace VisualProgramming.Configurations;
@@ -13,7 +14,8 @@ public class NodeConfiuration : IEntityTypeConfiguration<Node>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).IsRequired();
 
-        builder.Property(x => x.TypeOperation).IsRequired();
+        builder.Property(x => x.TypeOperation)
+            .IsRequired();
 
         builder.HasMany<NodePortConnection>("nodePortConnections")
             .WithOne(x => (Node)x!.Node!)

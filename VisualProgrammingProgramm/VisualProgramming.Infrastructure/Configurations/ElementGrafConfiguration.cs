@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using VisualProgramming.Domain.Entites;
+using VisualProgramming.ValueObject;
 
 
 namespace VisualProgramming.Configurations;
@@ -13,7 +14,8 @@ public class ElementGrafConfiguration : IEntityTypeConfiguration<ElementGraf>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).IsRequired();
 
-        builder.HasOne(x => x.Node); //?????????????
+        builder.HasOne(x => x.Node).WithMany()
+            .HasForeignKey("id_node");
 
         builder.Property(x => x.PositionX).IsRequired();
         builder.Property(x => x.PositionY).IsRequired();
@@ -21,5 +23,13 @@ public class ElementGrafConfiguration : IEntityTypeConfiguration<ElementGraf>
         builder.Property(x => x.IsModul).IsRequired();
 
         builder.HasOne(x => x.ParentGraf).WithMany("elementsGraf");
+
+        builder.HasMany(e => e.ElementGrafConnections)
+            .WithOne()
+            .HasForeignKey("id_element_graf");
+
+        builder.Property(e => e.LevelLevelOfDepthOperation)
+            .HasConversion(inp => inp.Value, outp => new LevelOfDepth(outp))
+            .IsRequired();
     }
 }

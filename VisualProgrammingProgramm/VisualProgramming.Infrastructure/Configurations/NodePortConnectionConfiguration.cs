@@ -13,7 +13,11 @@ public class NodePortConnectionConfiguration : IEntityTypeConfiguration<NodePort
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).IsRequired();
 
-        builder.HasOne(x => x.Node).WithMany("nodePortConnections");
-        builder.HasOne(x => x.Port).WithMany("nodePortConnections");
+        builder.HasOne(x => x.Node).WithMany("nodePortConnections")
+            .HasForeignKey("id_node")
+            .IsRequired(); ;
+        builder.HasOne(x => x.Port).WithMany("nodePortConnections")
+            .HasForeignKey("id_port")
+            .IsRequired(); ;
     }
 }
