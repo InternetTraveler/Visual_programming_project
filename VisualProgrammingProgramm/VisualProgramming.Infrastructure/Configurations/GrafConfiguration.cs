@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 using VisualProgramming.Domain.Entites;
 
 namespace VisualProgramming.Configurations;

@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Globalization;
 using VisualProgramming.Domain.Entites;
-using VisualProgramming.Domain.Enum;
 using VisualProgramming.ValueObject;
 using VisualProgramming.ValueObject.Validais;
 

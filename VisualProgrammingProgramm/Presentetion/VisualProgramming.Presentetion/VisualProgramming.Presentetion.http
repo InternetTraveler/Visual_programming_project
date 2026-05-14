@@ -1,0 +1,6 @@
+@VisualProgramming.Presentetion_HostAddress = http://localhost:5165
+
+GET {{VisualProgramming.Presentetion_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

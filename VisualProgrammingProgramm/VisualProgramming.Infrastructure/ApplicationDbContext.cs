@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using VisualProgramming.Domain.Entites;
 
-namespace VisualProgramming.Migrations;
+namespace VisualProgramming.Infrastructure;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {

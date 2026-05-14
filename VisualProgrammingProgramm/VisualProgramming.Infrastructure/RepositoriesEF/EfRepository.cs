@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using VisualProgramming.Domain.Base;
-using VisualProgramming.Migrations;
 using VisualProgramming.Repository.Base;
 
 namespace VisualProgramming.Infrastructure.RepositoriesEF;

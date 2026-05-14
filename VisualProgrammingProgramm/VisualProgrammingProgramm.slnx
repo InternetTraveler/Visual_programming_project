@@ -22,5 +22,8 @@
   <Folder Name="/Infrastructure/">
     <Project Path="VisualProgramming.Infrastructure/VisualProgramming.Infrastructure.csproj" Id="55bf443a-83c6-49f6-8de4-b61a8c0e38d9" />
   </Folder>
+  <Folder Name="/Presentetion/">
+    <Project Path="Presentetion/VisualProgramming.Presentetion/VisualProgramming.Presentetion.csproj" Id="b4b20752-ccb8-425a-a275-c7465979e925" />
+  </Folder>
   <Project Path="VisualProgrammingProgramm/VisualProgrammingProgramm.csproj" />
 </Solution>
