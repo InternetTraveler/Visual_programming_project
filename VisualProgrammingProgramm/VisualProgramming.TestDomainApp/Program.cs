@@ -1,7 +1,7 @@
 ﻿using VisualProgramming.Domain.Entites;
 using VisualProgramming.Domain.Enum;
 
-namespace VisualProgramming.ConsoleTest;
+namespace VisualProgramming.TestDomainApp;
 
 class Program
 {
