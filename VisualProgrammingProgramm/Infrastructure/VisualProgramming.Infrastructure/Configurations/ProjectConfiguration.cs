@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 using VisualProgramming.Domain.Entites;
 using VisualProgramming.ValueObject;
 
@@ -14,9 +13,9 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Project>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).IsRequired();
         builder.Property(x => x.Name)
-            .IsRequired(false)
+            .IsRequired()
             .HasConversion(name => name.Value, str => new Name(str))
-            .HasMaxLength(50);
+            .HasMaxLength(NameValidator.MaxLenghts);
 
         builder.HasMany<Graf>("_grafs")
             .WithOne(x => x.Project)
