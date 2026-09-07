@@ -1,11 +1,4 @@
 <Solution>
-  <Folder Name="/Aplication/" />
-  <Folder Name="/Aplication/VisualProgramming.Models/">
-    <Project Path="Aplication/VisualProgramming.Models/VisualProgramming.Models.csproj" Id="b2452791-a6af-453f-bda7-182c9bdbe12f" />
-  </Folder>
-  <Folder Name="/Aplication/VisualProgramming.Services/">
-    <Project Path="Aplication/VisualProgramming.Abstraction/VisualProgramming.Services.csproj" Id="30d36f62-362c-4a89-b2a9-0d6c22e004cb" />
-  </Folder>
   <Folder Name="/Domain/" />
   <Folder Name="/Domain/VisualProgramming.Domain/">
     <Project Path="Domain/VisualProgramming.Domain/VisualProgramming.Domain/VisualProgramming.Domain.csproj" />
@@ -25,5 +18,4 @@
   <Folder Name="/Presentetion/">
     <Project Path="Presentetion/VisualProgramming.Presentetion/VisualProgramming.Presentetion.csproj" Id="b4b20752-ccb8-425a-a275-c7465979e925" />
   </Folder>
-  <Project Path="VisualProgrammingProgramm/VisualProgrammingProgramm.csproj" />
 </Solution>
