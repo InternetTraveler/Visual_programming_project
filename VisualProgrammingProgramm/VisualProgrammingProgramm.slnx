@@ -1,0 +1,21 @@
+<Solution>
+  <Folder Name="/Domain/" />
+  <Folder Name="/Domain/VisualProgramming.Domain/">
+    <Project Path="Domain/VisualProgramming.Domain/VisualProgramming.Domain/VisualProgramming.Domain.csproj" />
+  </Folder>
+  <Folder Name="/Domain/VisualProgramming.Repository/">
+    <Project Path="Domain/VisualProgramming.Repository/VisualProgramming.Repository/VisualProgramming.Repository.csproj" Id="0fc29f2a-da30-4c69-b9df-1585d0361a4a" />
+  </Folder>
+  <Folder Name="/Domain/VisualProgramming.TestDomainApp/">
+    <Project Path="VisualProgramming.TestDomainApp/VisualProgramming.TestDomainApp.csproj" Id="67ff8acc-88e5-4818-a22d-75ca9f50f38d" />
+  </Folder>
+  <Folder Name="/Domain/VisualProgramming.ValueObject/">
+    <Project Path="Domain/VisualProgramming.ValueObject/VisualProgramming.ValueObject/VisualProgramming.ValueObject.csproj" Id="00e1d9c1-8263-4125-8201-ef7d9116f01e" />
+  </Folder>
+  <Folder Name="/Infrastructure/">
+    <Project Path="Infrastructure/VisualProgramming.Infrastructure/VisualProgramming.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Presentetion/">
+    <Project Path="Presentetion/VisualProgramming.Presentetion/VisualProgramming.Presentetion.csproj" Id="b4b20752-ccb8-425a-a275-c7465979e925" />
+  </Folder>
+</Solution>
