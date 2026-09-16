@@ -2,7 +2,7 @@
 
 namespace VisualProgramming.Moduls.Port;
 
-public record PortModul(
+public record PortModel(
     Guid Id, 
     Guid node, 
     int typePort, 

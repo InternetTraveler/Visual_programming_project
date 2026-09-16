@@ -2,6 +2,6 @@
 
 namespace VisualProgramming.Moduls.Graf;
 
-public record CreateGrafModul(
+public record CreateGrafModel(
     Guid Id, 
-    Guid project) : ICreateModul;
+    Guid project) : ICreateModel;

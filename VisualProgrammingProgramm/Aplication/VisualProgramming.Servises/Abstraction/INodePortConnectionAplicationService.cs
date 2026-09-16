@@ -4,7 +4,7 @@ using VisualProgramming.Servises.Abstraction.Base;
 
 namespace VisualProgramming.Servises.Abstraction;
 
-public interface INodePortConnectionAplicationService : IApplicationService<NodePortConnectionModul, CreateNodePortConnectionModul, Guid>
+public interface INodePortConnectionAplicationService : IApplicationService<NodePortConnectionModel, CreateNodePortConnectionModel, Guid>
 {
 
 }

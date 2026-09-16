@@ -11,24 +11,24 @@ public class GrafApplicationService(
     IMapper mapper)
     : IGrafAplicationService
 {
-    public async Task<IEnumerable<GrafModul>> GetModelsAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<GrafModel>> GetModelsAsync(CancellationToken cancellationToken = default)
         => (await repository.GetAllAsync(cancellationToken, true))
-        .Select(mapper.Map<GrafModul>);
+        .Select(mapper.Map<GrafModel>);
 
-    public async Task<GrafModul?> GetModelByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<GrafModel?> GetModelByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var graf = await repository.GetByIdAsync(id, cancellationToken);
-        return graf is null ? null : mapper.Map<GrafModul>(graf);
+        return graf is null ? null : mapper.Map<GrafModel>(graf);
     }
 
-    public async Task<GrafModul?> CreateModelAsync(CreateGrafModul model, CancellationToken cancellationToken = default)
+    public async Task<GrafModel?> CreateModelAsync(CreateGrafModel model, CancellationToken cancellationToken = default)
     {
         var graf = new Graf(mapper.Map<Project>(model.project));
         var created = await repository.AddAsync(graf, cancellationToken);
-        return created is null ? null : mapper.Map<GrafModul>(created);
+        return created is null ? null : mapper.Map<GrafModel>(created);
     }
 
-    public async Task<bool> UpdateModelAsync(GrafModul model, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateModelAsync(GrafModel model, CancellationToken cancellationToken = default)
     {
         var graf = await repository.GetByIdAsync(model.Id, cancellationToken);
         if (graf is null)

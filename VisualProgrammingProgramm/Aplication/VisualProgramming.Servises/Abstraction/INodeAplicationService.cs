@@ -4,7 +4,7 @@ using VisualProgramming.Servises.Abstraction.Base;
 
 namespace VisualProgramming.Servises.Abstraction;
 
-public interface INodeAplicationService : IApplicationService<NodeModul, CreateNodeModul, Guid>
+public interface INodeAplicationService : IApplicationService<NodeModel, CreateNodeModel, Guid>
 {
 
 }

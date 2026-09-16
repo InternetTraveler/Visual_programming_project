@@ -4,7 +4,7 @@ using VisualProgramming.Servises.Abstraction.Base;
 
 namespace VisualProgramming.Servises.Abstraction;
 
-public interface IElementGrafAplicationService : IApplicationService<ElementGrafModul, CreateElementGrafModul, Guid>
+public interface IElementGrafAplicationService : IApplicationService<ElementGrafModel, CreateElementGrafModel, Guid>
 {
 
 }

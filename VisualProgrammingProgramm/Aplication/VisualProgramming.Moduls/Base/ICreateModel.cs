@@ -1,3 +1,3 @@
 ﻿namespace VisualProgramming.Moduls.Base;
 
-public interface ICreateModul;
+public interface ICreateModel;

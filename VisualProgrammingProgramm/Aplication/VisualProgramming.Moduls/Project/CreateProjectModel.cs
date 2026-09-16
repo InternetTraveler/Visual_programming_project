@@ -2,6 +2,6 @@
 
 namespace VisualProgramming.Moduls.Project;
 
-public record CreateProjectModul(
+public record CreateProjectModel(
     Guid Id,
-    string? name) : ICreateModul;
+    string? name) : ICreateModel;

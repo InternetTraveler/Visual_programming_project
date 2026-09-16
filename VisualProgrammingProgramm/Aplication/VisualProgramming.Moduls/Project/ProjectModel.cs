@@ -2,6 +2,6 @@
 
 namespace VisualProgramming.Moduls.Project;
 
-public record ProjectModul(
+public record ProjectModel(
     Guid Id, 
     string? name) : IModel<Guid>;

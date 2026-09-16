@@ -2,7 +2,7 @@
 
 namespace VisualProgramming.Moduls.Modul;
 
-public record ModulModul(
+public record ModulModel(
     Guid Id,
     string? name,
     Guid grafOPeration) : IModel<Guid>;

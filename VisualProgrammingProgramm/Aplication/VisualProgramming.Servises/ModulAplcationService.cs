@@ -12,27 +12,27 @@ public class ModulApplicationService(
     IMapper mapper)
     : IModulAplicationService
 {
-    public async Task<IEnumerable<ModulModul>> GetModelsAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<ModulModel>> GetModelsAsync(CancellationToken cancellationToken = default)
         => (await repository.GetAllAsync(cancellationToken, true))
-        .Select(mapper.Map<ModulModul>);
+        .Select(mapper.Map<ModulModel>);
 
-    public async Task<ModulModul?> GetModelByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<ModulModel?> GetModelByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var modul = await repository.GetByIdAsync(id, cancellationToken);
-        return modul is null ? null : mapper.Map<ModulModul>(modul);
+        return modul is null ? null : mapper.Map<ModulModel>(modul);
     }
 
-    public async Task<ModulModul?> CreateModelAsync(CreateModulModul model, CancellationToken cancellationToken = default)
+    public async Task<ModulModel?> CreateModelAsync(CreateModulModel model, CancellationToken cancellationToken = default)
     {
         var modul = new Modul(
             new Name(model.name),
             mapper.Map<Graf>(model.grafOPeration));
 
         var created = await repository.AddAsync(modul, cancellationToken);
-        return created is null ? null : mapper.Map<ModulModul>(created);
+        return created is null ? null : mapper.Map<ModulModel>(created);
     }
 
-    public async Task<bool> UpdateModelAsync(ModulModul model, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateModelAsync(ModulModel model, CancellationToken cancellationToken = default)
     {
         var modul = await repository.GetByIdAsync(model.Id, cancellationToken);
         if (modul is null)

@@ -6,7 +6,7 @@ namespace VisualProgramming.Servises.Abstraction.Base;
 public interface IApplicationService<TModel, TCreateModel, in TId>
      where TModel : IModel<TId>
      where TId : struct, IEquatable<TId>
-     where TCreateModel : ICreateModul
+     where TCreateModel : ICreateModel
 {
     Task<TModel?> GetModelByIdAsync(TId id, CancellationToken cancellationToken = default);
 

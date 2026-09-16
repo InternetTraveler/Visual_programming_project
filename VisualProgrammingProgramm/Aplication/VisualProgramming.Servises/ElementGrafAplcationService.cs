@@ -12,17 +12,17 @@ public class ElementGrafApplicationService(
     IMapper mapper)
     : IElementGrafAplicationService
 {
-    public async Task<IEnumerable<ElementGrafModul>> GetModelsAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<ElementGrafModel>> GetModelsAsync(CancellationToken cancellationToken = default)
         => (await repository.GetAllAsync(cancellationToken, true))
-        .Select(mapper.Map<ElementGrafModul>);
+        .Select(mapper.Map<ElementGrafModel>);
 
-    public async Task<ElementGrafModul?> GetModelByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<ElementGrafModel?> GetModelByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var element = await repository.GetByIdAsync(id, cancellationToken);
-        return element is null ? null : mapper.Map<ElementGrafModul>(element);
+        return element is null ? null : mapper.Map<ElementGrafModel>(element);
     }
 
-    public async Task<ElementGrafModul?> CreateModelAsync(CreateElementGrafModul model, CancellationToken cancellationToken = default)
+    public async Task<ElementGrafModel?> CreateModelAsync(CreateElementGrafModel model, CancellationToken cancellationToken = default)
     {
         var element = new ElementGraf(
             mapper.Map<BaseNode>(model.baseNode),
@@ -33,10 +33,10 @@ public class ElementGrafApplicationService(
             model.positionY);
 
         var created = await repository.AddAsync(element, cancellationToken);
-        return created is null ? null : mapper.Map<ElementGrafModul>(created);
+        return created is null ? null : mapper.Map<ElementGrafModel>(created);
     }
 
-    public async Task<bool> UpdateModelAsync(ElementGrafModul model, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateModelAsync(ElementGrafModel model, CancellationToken cancellationToken = default)
     {
         var element = await repository.GetByIdAsync(model.Id, cancellationToken);
         if (element is null)

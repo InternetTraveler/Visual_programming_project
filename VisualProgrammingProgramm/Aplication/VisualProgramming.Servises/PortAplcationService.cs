@@ -13,17 +13,17 @@ public class PortApplicationService(
     IMapper mapper)
     : IPortAplicationService
 {
-    public async Task<IEnumerable<PortModul>> GetModelsAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<PortModel>> GetModelsAsync(CancellationToken cancellationToken = default)
         => (await repository.GetAllAsync(cancellationToken, true))
-        .Select(mapper.Map<PortModul>);
+        .Select(mapper.Map<PortModel>);
 
-    public async Task<PortModul?> GetModelByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<PortModel?> GetModelByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var port = await repository.GetByIdAsync(id, cancellationToken);
-        return port is null ? null : mapper.Map<PortModul>(port);
+        return port is null ? null : mapper.Map<PortModel>(port);
     }
 
-    public async Task<PortModul?> CreateModelAsync(CreatePortModul model, CancellationToken cancellationToken = default)
+    public async Task<PortModel?> CreateModelAsync(CreatePortModel model, CancellationToken cancellationToken = default)
     {
         var port = new Port(
             mapper.Map<BaseNode>(model.node),
@@ -31,10 +31,10 @@ public class PortApplicationService(
             model.description);
 
         var created = await repository.AddAsync(port, cancellationToken);
-        return created is null ? null : mapper.Map<PortModul>(created);
+        return created is null ? null : mapper.Map<PortModel>(created);
     }
 
-    public async Task<bool> UpdateModelAsync(PortModul model, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateModelAsync(PortModel model, CancellationToken cancellationToken = default)
     {
         var port = await repository.GetByIdAsync(model.Id, cancellationToken);
         if (port is null)

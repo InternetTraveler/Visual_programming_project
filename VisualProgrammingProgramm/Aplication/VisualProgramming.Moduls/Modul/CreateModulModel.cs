@@ -3,7 +3,7 @@ using VisualProgramming.Moduls.Base;
 
 namespace VisualProgramming.Moduls.Modul;
 
-public record CreateModulModul(
+public record CreateModulModel(
     Guid Id, 
     string? name, 
-    Guid grafOPeration) : ICreateModul;
+    Guid grafOPeration) : ICreateModel;

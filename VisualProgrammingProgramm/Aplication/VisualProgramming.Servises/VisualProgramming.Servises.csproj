@@ -14,7 +14,7 @@
     <ProjectReference Include="..\..\Domain\VisualProgramming.Domain\VisualProgramming.Domain\VisualProgramming.Domain.csproj" />
     <ProjectReference Include="..\..\Domain\VisualProgramming.Repository\VisualProgramming.Repository\VisualProgramming.Repository.csproj" />
     <ProjectReference Include="..\..\Domain\VisualProgramming.ValueObject\VisualProgramming.ValueObject\VisualProgramming.ValueObject.csproj" />
-    <ProjectReference Include="..\VisualProgramming.Moduls\VisualProgramming.Moduls.csproj" />
+    <ProjectReference Include="..\VisualProgramming.Moduls\VisualProgramming.Models.csproj" />
   </ItemGroup>
 
 </Project>

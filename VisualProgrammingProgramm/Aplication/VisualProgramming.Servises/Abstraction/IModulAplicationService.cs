@@ -4,7 +4,7 @@ using VisualProgramming.Servises.Abstraction.Base;
 
 namespace VisualProgramming.Servises.Abstraction;
 
-public interface IModulAplicationService : IApplicationService<ModulModul, CreateModulModul, Guid>
+public interface IModulAplicationService : IApplicationService<ModulModel, CreateModulModel, Guid>
 {
 
 }

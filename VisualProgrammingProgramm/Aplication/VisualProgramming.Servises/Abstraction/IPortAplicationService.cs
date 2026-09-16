@@ -4,7 +4,7 @@ using VisualProgramming.Servises.Abstraction.Base;
 
 namespace VisualProgramming.Servises.Abstraction;
 
-public interface IPortAplicationService : IApplicationService<PortModul, CreatePortModul, Guid>
+public interface IPortAplicationService : IApplicationService<PortModel, CreatePortModel, Guid>
 {
 
 }

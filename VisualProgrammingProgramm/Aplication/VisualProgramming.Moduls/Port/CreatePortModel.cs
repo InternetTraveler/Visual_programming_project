@@ -2,8 +2,8 @@
 
 namespace VisualProgramming.Moduls.Port;
 
-public record CreatePortModul(
+public record CreatePortModel(
     Guid Id,
     Guid node,
     int typePort,
-    string description) : ICreateModul;
+    string description) : ICreateModel;

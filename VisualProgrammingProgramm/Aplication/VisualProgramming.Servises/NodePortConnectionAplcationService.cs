@@ -12,27 +12,27 @@ public class NodePortConnectionApplicationService(
     IMapper mapper)
     : INodePortConnectionAplicationService
 {
-    public async Task<IEnumerable<NodePortConnectionModul>> GetModelsAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<NodePortConnectionModel>> GetModelsAsync(CancellationToken cancellationToken = default)
         => (await repository.GetAllAsync(cancellationToken, true))
-        .Select(mapper.Map<NodePortConnectionModul>);
+        .Select(mapper.Map<NodePortConnectionModel>);
 
-    public async Task<NodePortConnectionModul?> GetModelByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<NodePortConnectionModel?> GetModelByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var connection = await repository.GetByIdAsync(id, cancellationToken);
-        return connection is null ? null : mapper.Map<NodePortConnectionModul>(connection);
+        return connection is null ? null : mapper.Map<NodePortConnectionModel>(connection);
     }
 
-    public async Task<NodePortConnectionModul?> CreateModelAsync(CreateNodePortConnectionModul model, CancellationToken cancellationToken = default)
+    public async Task<NodePortConnectionModel?> CreateModelAsync(CreateNodePortConnectionModel model, CancellationToken cancellationToken = default)
     {
         var connection = new NodePortConnection(
             mapper.Map<BaseNode>(model.node),
             mapper.Map<Port>(model.port));
 
         var created = await repository.AddAsync(connection, cancellationToken);
-        return created is null ? null : mapper.Map<NodePortConnectionModul>(created);
+        return created is null ? null : mapper.Map<NodePortConnectionModel>(created);
     }
 
-    public async Task<bool> UpdateModelAsync(NodePortConnectionModul model, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateModelAsync(NodePortConnectionModel model, CancellationToken cancellationToken = default)
     {
         var connection = await repository.GetByIdAsync(model.Id, cancellationToken);
         if (connection is null)

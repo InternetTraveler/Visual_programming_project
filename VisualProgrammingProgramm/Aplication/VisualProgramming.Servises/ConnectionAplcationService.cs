@@ -11,17 +11,17 @@ public class ConnectionApplicationService(
     IMapper mapper)
     : IConnectionAplicationService
 {
-    public async Task<IEnumerable<ConnectionModul>> GetModelsAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<ConnectionModel>> GetModelsAsync(CancellationToken cancellationToken = default)
         => (await repository.GetAllAsync(cancellationToken, true))
-        .Select(mapper.Map<ConnectionModul>);
+        .Select(mapper.Map<ConnectionModel>);
 
-    public async Task<ConnectionModul?> GetModelByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<ConnectionModel?> GetModelByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var connection = await repository.GetByIdAsync(id, cancellationToken);
-        return connection is null ? null : mapper.Map<ConnectionModul>(connection);
+        return connection is null ? null : mapper.Map<ConnectionModel>(connection);
     }
 
-    public async Task<ConnectionModul?> CreateModelAsync(CreateConnectionModul model, CancellationToken cancellationToken = default)
+    public async Task<ConnectionModel?> CreateModelAsync(CreateConnectionModel model, CancellationToken cancellationToken = default)
     {
         var connection = new Connection(
             mapper.Map<Port>(model.sourcePort),
@@ -30,10 +30,10 @@ public class ConnectionApplicationService(
             mapper.Map<ElementGraf>(model.outElemGraf));
 
         var created = await repository.AddAsync(connection, cancellationToken);
-        return created is null ? null : mapper.Map<ConnectionModul>(created);
+        return created is null ? null : mapper.Map<ConnectionModel>(created);
     }
 
-    public async Task<bool> UpdateModelAsync(ConnectionModul model, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateModelAsync(ConnectionModel model, CancellationToken cancellationToken = default)
     {
         var connection = await repository.GetByIdAsync(model.Id, cancellationToken);
         if (connection is null)

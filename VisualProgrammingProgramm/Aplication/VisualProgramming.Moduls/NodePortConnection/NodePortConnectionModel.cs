@@ -2,8 +2,8 @@
 
 namespace VisualProgramming.Moduls.NodePortConnection;
 
-public record CreateNodePortConnectionModul(
+public record NodePortConnectionModel(
     Guid Id,
-    Guid node,
+    Guid node, 
     Guid port
-    ) : ICreateModul;
+    ) : IModel<Guid>;
