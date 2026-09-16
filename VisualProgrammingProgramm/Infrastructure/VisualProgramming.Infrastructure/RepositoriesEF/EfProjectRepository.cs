@@ -8,37 +8,13 @@ using VisualProgramming.Repository.Base;
 namespace VisualProgramming.Infrastructure.RepositoriesEF;
 
 public class EfProjectRepository(ApplicationDbContext context) :
-    EfRepository<Node, Guid>(context), IProjectRepository
+    EfRepository<Project, Guid>(context), IProjectRepository
 {
     private readonly DbSet<Project> _projects = context.Set<Project>();
 
-    public Task<Project?> AddAsync(Project entity, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> DeleteAsync(Project entity, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
     public Task<Graf?> GetGrafByIdProjectAsync(Guid id, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> UpdateAsync(Project entity, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
-    Task<IEnumerable<Project>> IRepository<Project, Guid>.GetAllAsync(CancellationToken cancellationToken, bool asNoTracking)
-    {
-        throw new NotImplementedException();
-    }
-
-    Task<Project?> IRepository<Project, Guid>.GetByIdAsync(Guid id, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
+    => _projects
+        .Where(p => p.Id == id)
+        .SelectMany(p => p.Grafs)
+        .FirstOrDefaultAsync(cancellationToken);
 }

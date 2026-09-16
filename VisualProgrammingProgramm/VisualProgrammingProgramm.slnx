@@ -1,4 +1,8 @@
 <Solution>
+  <Folder Name="/Aplication/">
+    <Project Path="Aplication/VisualProgramming.Moduls/VisualProgramming.Models.csproj" Id="7273682e-5dd5-43fc-8d9c-2e0ca6a211fa" />
+    <Project Path="Aplication/VisualProgramming.Servises/VisualProgramming.Servises.csproj" Id="be911375-649e-48ba-bbd0-1aca577f8519" />
+  </Folder>
   <Folder Name="/Domain/" />
   <Folder Name="/Domain/VisualProgramming.Domain/">
     <Project Path="Domain/VisualProgramming.Domain/VisualProgramming.Domain/VisualProgramming.Domain.csproj" />

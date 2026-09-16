@@ -10,7 +10,9 @@ public class EfNodeRepository(ApplicationDbContext context) :
     private readonly DbSet<Node> _nodes = context.Set<Node>();
 
     public Task<Port?> GetPortByIdNodeAsync(Guid id, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
+    => _nodes
+        .Where(n => n.Id == id)
+        .SelectMany(n => n.NodePortConnections)
+        .Select(npc => npc.Port)
+        .FirstOrDefaultAsync(cancellationToken);
 }
