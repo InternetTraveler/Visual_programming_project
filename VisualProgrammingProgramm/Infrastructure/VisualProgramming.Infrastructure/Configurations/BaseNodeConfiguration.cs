@@ -10,7 +10,6 @@ public class BaseNodeConfiguration : IEntityTypeConfiguration<BaseNode>
 {
     public void Configure(EntityTypeBuilder<BaseNode> builder)
     {
-        builder.ToTable("BaseNodes");
         builder.HasKey(b => b.Id);
         builder.Property(b => b.Name)
             .HasConversion(n => n.Value, v => new Name(v))

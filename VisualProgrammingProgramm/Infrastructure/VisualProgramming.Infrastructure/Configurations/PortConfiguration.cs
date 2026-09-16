@@ -22,11 +22,6 @@ public class PortConfiguration : IEntityTypeConfiguration<Port>
         builder.Property(x => x.TypePort)
             .IsRequired();
 
-        builder.HasOne(p => p.Node)
-            .WithMany()
-            .HasForeignKey("NodeId")
-            .IsRequired();
-
         builder.HasMany<NodePortConnection>("nodePortConnections")
             .WithOne(x => x.Port)
             .HasForeignKey("id_port")
