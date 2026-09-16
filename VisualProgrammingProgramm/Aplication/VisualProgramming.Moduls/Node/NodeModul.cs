@@ -2,7 +2,7 @@
 
 namespace VisualProgramming.Moduls.Node;
 
-public record CreateModulModul(
+public record NodeModul(
     Guid Id,
     string? name,
     int typeOperation) : IModel<Guid>;

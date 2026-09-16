@@ -2,7 +2,7 @@
 
 namespace VisualProgramming.Moduls.Node;
 
-public record CreateModulModul(
+public record CreateNodeModul(
     Guid Id, 
     string? name, 
     int typeOperation) : ICreateModul;

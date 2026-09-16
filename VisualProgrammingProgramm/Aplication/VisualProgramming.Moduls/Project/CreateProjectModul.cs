@@ -4,4 +4,4 @@ namespace VisualProgramming.Moduls.Project;
 
 public record CreateProjectModul(
     Guid Id,
-    string? name) : IModel<Guid>;
+    string? name) : ICreateModul;
