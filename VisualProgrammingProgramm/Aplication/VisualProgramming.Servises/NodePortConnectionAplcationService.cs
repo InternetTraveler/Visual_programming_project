@@ -59,4 +59,38 @@ public class NodePortConnectionApplicationService(
         var connection = await repository.GetByIdAsync(id, cancellationToken);
         return connection is not null && await repository.DeleteAsync(connection, cancellationToken);
     }
+
+    public async Task<bool> IsContainNodeAsync(Guid connectionId, Guid nodeId, CancellationToken cancellationToken = default)
+    {
+        var connection = await repository.GetByIdAsync(connectionId, cancellationToken);
+        if (connection?.Node is null)
+            return false;
+
+        return connection.Node.Id == nodeId;
+    }
+
+    public async Task<bool> IsContainPortAsync(Guid connectionId, Guid portId, CancellationToken cancellationToken = default)
+    {
+        var connection = await repository.GetByIdAsync(connectionId, cancellationToken);
+        if (connection?.Port is null)
+            return false;
+
+        return connection.Port.Id == portId;
+    }
+
+    public async Task<IEnumerable<NodePortConnectionModel>> GetByNodeIdAsync(Guid nodeId, CancellationToken cancellationToken = default)
+    {
+        var connections = await repository.GetAllAsync(cancellationToken, true);
+        return connections
+            .Where(c => c.Node?.Id == nodeId)
+            .Select(mapper.Map<NodePortConnectionModel>);
+    }
+
+    public async Task<IEnumerable<NodePortConnectionModel>> GetByPortIdAsync(Guid portId, CancellationToken cancellationToken = default)
+    {
+        var connections = await repository.GetAllAsync(cancellationToken, true);
+        return connections
+            .Where(c => c.Port?.Id == portId)
+            .Select(mapper.Map<NodePortConnectionModel>);
+    }
 }

@@ -58,6 +58,16 @@ public class ConnectionApplicationService(
     public async Task<bool> DeleteModelAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var connection = await repository.GetByIdAsync(id, cancellationToken);
-        return connection is null ? false : await repository.DeleteAsync(connection, cancellationToken);
+        return connection is not null && await repository.DeleteAsync(connection, cancellationToken);
+    }
+
+    public async Task<bool> IsContainsElementGrafAsync(Guid connectionId, Guid elementGrafId, CancellationToken cancellationToken = default)
+    {
+        var connection = await repository.GetByIdAsync(connectionId, cancellationToken);
+        if (connection is null)
+            return false;
+
+        return connection.InElementGraf?.Id == elementGrafId
+            || connection.OutElementGraf?.Id == elementGrafId;
     }
 }

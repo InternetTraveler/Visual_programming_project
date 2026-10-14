@@ -59,4 +59,12 @@ public class PortApplicationService(
         var port = await repository.GetByIdAsync(id, cancellationToken);
         return port is not null && await repository.DeleteAsync(port, cancellationToken);
     }
+
+    public async Task<IEnumerable<PortModel>> GetByNodeIdAsync(Guid nodeId, CancellationToken cancellationToken = default)
+    {
+        var ports = await repository.GetAllAsync(cancellationToken, true);
+        return ports
+            .Where(p => p.Node?.Id == nodeId)
+            .Select(mapper.Map<PortModel>);
+    }
 }
