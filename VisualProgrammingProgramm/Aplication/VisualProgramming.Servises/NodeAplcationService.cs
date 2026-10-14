@@ -8,6 +8,11 @@ using VisualProgramming.ValueObject;
 
 namespace VisualProgramming.Servises;
 
+/// <summary>
+/// Реализация <see cref="INodeAplicationService"/> для управления узлами.
+/// </summary>
+/// <param name="repository">Репозиторий узлов.</param>
+/// <param name="mapper">Маппер доменных моделей и моделей приложения.</param>
 public class NodeApplicationService(
     IRepository<Node, Guid> repository,
     IMapper mapper)

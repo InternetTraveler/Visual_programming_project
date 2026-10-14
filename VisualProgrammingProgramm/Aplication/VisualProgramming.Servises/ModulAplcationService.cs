@@ -7,6 +7,11 @@ using VisualProgramming.ValueObject;
 
 namespace VisualProgramming.Servises;
 
+/// <summary>
+/// Реализация <see cref="IModulAplicationService"/> для управления модулями.
+/// </summary>
+/// <param name="repository">Репозиторий модулей.</param>
+/// <param name="mapper">Маппер доменных моделей и моделей приложения.</param>
 public class ModulApplicationService(
     IRepository<Modul, Guid> repository,
     IMapper mapper)

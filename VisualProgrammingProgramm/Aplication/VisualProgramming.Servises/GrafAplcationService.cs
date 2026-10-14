@@ -6,6 +6,11 @@ using VisualProgramming.Servises.Abstraction;
 
 namespace VisualProgramming.Servises;
 
+/// <summary>
+/// Реализация <see cref="IGrafAplicationService"/> для управления графами.
+/// </summary>
+/// <param name="repository">Репозиторий графов.</param>
+/// <param name="mapper">Маппер доменных моделей и моделей приложения.</param>
 public class GrafApplicationService(
     IRepository<Graf, Guid> repository,
     IMapper mapper)

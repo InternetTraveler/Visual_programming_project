@@ -8,21 +8,29 @@ using VisualProgramming.Servises.Abstraction;
 
 namespace VisualProgramming.Servises;
 
+/// <summary>
+/// Реализация <see cref="IPortAplicationService"/> для управления портами.
+/// </summary>
+/// <param name="repository">Репозиторий портов.</param>
+/// <param name="mapper">Маппер доменных моделей и моделей приложения.</param>
 public class PortApplicationService(
     IRepository<Port, Guid> repository,
     IMapper mapper)
     : IPortAplicationService
 {
+    /// <inheritdoc/>
     public async Task<IEnumerable<PortModel>> GetModelsAsync(CancellationToken cancellationToken = default)
         => (await repository.GetAllAsync(cancellationToken, true))
         .Select(mapper.Map<PortModel>);
 
+    /// <inheritdoc/>
     public async Task<PortModel?> GetModelByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var port = await repository.GetByIdAsync(id, cancellationToken);
         return port is null ? null : mapper.Map<PortModel>(port);
     }
 
+    /// <inheritdoc/>
     public async Task<PortModel?> CreateModelAsync(CreatePortModel model, CancellationToken cancellationToken = default)
     {
         var port = new Port(
@@ -34,18 +42,21 @@ public class PortApplicationService(
         return created is null ? null : mapper.Map<PortModel>(created);
     }
 
+    /// <inheritdoc/>
     public async Task<bool> UpdateModelAsync(PortModel model, CancellationToken cancellationToken = default)
     {
         var port = await repository.GetByIdAsync(model.Id, cancellationToken);
         if (port is null)
             return false;
 
+        port = mapper.Map<Port>(model);
         return await repository.UpdateAsync(port, cancellationToken);
     }
 
+    /// <inheritdoc/>
     public async Task<bool> DeleteModelAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var port = await repository.GetByIdAsync(id, cancellationToken);
-        return port is null ? false : await repository.DeleteAsync(port, cancellationToken);
+        return port is not null && await repository.DeleteAsync(port, cancellationToken);
     }
 }

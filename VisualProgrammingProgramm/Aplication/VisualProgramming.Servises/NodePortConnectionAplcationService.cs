@@ -7,21 +7,29 @@ using VisualProgramming.Servises.Abstraction;
 
 namespace VisualProgramming.Servises;
 
+/// <summary>
+/// Реализация <see cref="INodePortConnectionAplicationService"/> для управления связями узел–порт.
+/// </summary>
+/// <param name="repository">Репозиторий связей узел–порт.</param>
+/// <param name="mapper">Маппер доменных моделей и моделей приложения.</param>
 public class NodePortConnectionApplicationService(
     IRepository<NodePortConnection, Guid> repository,
     IMapper mapper)
     : INodePortConnectionAplicationService
 {
+    /// <inheritdoc/>
     public async Task<IEnumerable<NodePortConnectionModel>> GetModelsAsync(CancellationToken cancellationToken = default)
         => (await repository.GetAllAsync(cancellationToken, true))
         .Select(mapper.Map<NodePortConnectionModel>);
 
+    /// <inheritdoc/>
     public async Task<NodePortConnectionModel?> GetModelByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var connection = await repository.GetByIdAsync(id, cancellationToken);
         return connection is null ? null : mapper.Map<NodePortConnectionModel>(connection);
     }
 
+    /// <inheritdoc/>
     public async Task<NodePortConnectionModel?> CreateModelAsync(CreateNodePortConnectionModel model, CancellationToken cancellationToken = default)
     {
         var connection = new NodePortConnection(
@@ -32,6 +40,7 @@ public class NodePortConnectionApplicationService(
         return created is null ? null : mapper.Map<NodePortConnectionModel>(created);
     }
 
+    /// <inheritdoc/>
     public async Task<bool> UpdateModelAsync(NodePortConnectionModel model, CancellationToken cancellationToken = default)
     {
         var connection = await repository.GetByIdAsync(model.Id, cancellationToken);
@@ -44,9 +53,10 @@ public class NodePortConnectionApplicationService(
         return await repository.UpdateAsync(connection, cancellationToken);
     }
 
+    /// <inheritdoc/>
     public async Task<bool> DeleteModelAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var connection = await repository.GetByIdAsync(id, cancellationToken);
-        return connection is null ? false : await repository.DeleteAsync(connection, cancellationToken);
+        return connection is not null && await repository.DeleteAsync(connection, cancellationToken);
     }
 }

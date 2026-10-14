@@ -6,6 +6,11 @@ using VisualProgramming.Servises.Abstraction;
 
 namespace VisualProgramming.Servises;
 
+/// <summary>
+/// Реализация <see cref="IConnectionAplicationService"/> для управления соединениями.
+/// </summary>
+/// <param name="repository">Репозиторий соединений.</param>
+/// <param name="mapper">Маппер доменных моделей и моделей приложения.</param>
 public class ConnectionApplicationService(
     IRepository<Connection, Guid> repository,
     IMapper mapper)

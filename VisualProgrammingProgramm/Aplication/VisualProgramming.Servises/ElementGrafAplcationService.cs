@@ -7,6 +7,11 @@ using VisualProgramming.Servises.Abstraction;
 
 namespace VisualProgramming.Servises;
 
+/// <summary>
+/// Реализация <see cref="IElementGrafAplicationService"/> для управления элементами графа.
+/// </summary>
+/// <param name="repository">Репозиторий элементов графа.</param>
+/// <param name="mapper">Маппер доменных моделей и моделей приложения.</param>
 public class ElementGrafApplicationService(
     IRepository<ElementGraf, Guid> repository,
     IMapper mapper)
