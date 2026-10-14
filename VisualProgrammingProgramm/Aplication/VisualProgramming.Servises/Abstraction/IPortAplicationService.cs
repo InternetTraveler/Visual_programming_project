@@ -6,5 +6,6 @@ namespace VisualProgramming.Servises.Abstraction;
 
 public interface IPortAplicationService : IApplicationService<PortModel, CreatePortModel, Guid>
 {
-
+    // Получение всех портов узла
+    Task<IEnumerable<PortModel>> GetByNodeIdAsync(Guid nodeId, CancellationToken cancellationToken = default);
 }
