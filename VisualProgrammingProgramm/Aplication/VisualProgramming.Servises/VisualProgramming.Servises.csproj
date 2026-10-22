@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="16.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domain\VisualProgramming.Domain\VisualProgramming.Domain\VisualProgramming.Domain.csproj" />
+    <ProjectReference Include="..\..\Domain\VisualProgramming.Repository\VisualProgramming.Repository\VisualProgramming.Repository.csproj" />
+    <ProjectReference Include="..\..\Domain\VisualProgramming.ValueObject\VisualProgramming.ValueObject\VisualProgramming.ValueObject.csproj" />
+    <ProjectReference Include="..\VisualProgramming.Moduls\VisualProgramming.Models.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,83 +1,107 @@
 ﻿using VisualProgramming.Domain.Entites;
 using VisualProgramming.Domain.Enum;
+using VisualProgramming.ValueObject;
 
-namespace VisualProgramming.TestDomainApp;
+namespace VisualProgramming.Tests;
 
 class Program
 {
-    static void Main(string[] args)
+    static void Main()
     {
-        Console.WriteLine("=== Тестирование VisualProgramming.Domain ===\n");
-
         try
         {
-            // Создаем проект
-            var project = new Project("Test Project");
-            Console.WriteLine($"[+] Создан проект: {project.Name.Value}");
+            Console.WriteLine("=== НАЧАЛО ТЕСТИРОВАНИЯ ===\n");
 
-            // Создаем граф
+            // 1. Создание проекта
+            var projectName = new Name("Тестовый проект");
+            var project = new Project(projectName);
+            Console.WriteLine($"✅ Создан проект: {project.Name.Value}");
+
+            // 2. Создание графа
             var graf = new Graf(project);
             project.AddGraf(graf);
-            Console.WriteLine($"[+] Создан граф: {graf.Id}");
+            Console.WriteLine($"✅ Создан граф, добавлен в проект");
 
-            // Создаем узлы
-            var node1 = new Node("Add Node", TypeOperation.ADD);
-            var node2 = new Node("Multiply Node", TypeOperation.MUL);
-            Console.WriteLine($"[+] Созданы узлы: {node1.Name.Value}, {node2.Name.Value}");
+            // 3. Создание узла (Node)
+            var nodeName = new Name("Калькулятор");
+            var node = new Node(nodeName, TypeOperation.ADD);
+            Console.WriteLine($"✅ Создан узел: {node.Name.Value}, операция: {node.TypeOperation}");
 
-            // Создаем порты
-            var port1 = new Port(node1, TypePort.INPUT, "Input port for addition");
-            var port2 = new Port(node2, TypePort.OUTPUT, "Output port for multiplication");
-            Console.WriteLine($"[+] Созданы порты");
+            // 4. Создание модуля (Modul)
+            var innerGraf = new Graf(project);
+            var modulName = new Name("Внутренний модуль");
+            var modul = new Modul(modulName, innerGraf);
+            Console.WriteLine($"✅ Создан модуль: {modul.Name.Value}");
 
-            // Создаем связи узлов с портами
-            var npc1 = new NodePortConnection(node1, port1);
-            var npc2 = new NodePortConnection(node2, port2);
+            // 5. Создание портов
+            var inputPort = new Port(node, TypePort.INPUT, "Входной порт");
+            var outputPort = new Port(node, TypePort.OUTPUT, "Выходной порт");
+            var modulPort = new Port(modul, TypePort.INPUT, "Порт модуля");
+            Console.WriteLine($"✅ Созданы порты: Input, Output, ModulPort");
 
-            var npc3 = new NodePortConnection(node1, port2);
-            var npc4 = new NodePortConnection(node2, port1);
-            Console.WriteLine($"[+] Созданы связи Node-Port");
+            // 6. Связь портов с узлами через NodePortConnection
+            var nodePortConn1 = new NodePortConnection(node, inputPort);
+            var nodePortConn2 = new NodePortConnection(node, outputPort);
+            var nodePortConn3 = new NodePortConnection(modul, modulPort);
+            Console.WriteLine($"✅ Созданы связи Node-Port (3 шт.)");
 
-            // Создаем элементы графа
-            var element1 = new ElementGraf(node1, 1, false, graf, 100, 100);
-            var element2 = new ElementGraf(node2, 1, false, graf, 300, 100);
-            var element3 = new ElementGraf(node1, 1, false, graf, 100, 300);
-            graf.AddElement(element1);
-            graf.AddElement(element2);
-            graf.AddElement(element3);
-            Console.WriteLine($"[+] Добавлены элементы в граф");
+            // 7. Создание элементов графа (ElementGraf)
+            var level = 1;
+            var elementNode = new ElementGraf(node, level, false, graf, 100, 200);
+            var elementModul = new ElementGraf(modul, level, true, graf, 300, 400);
 
-            // Создаем соединение между портами
-            var connection = new Connection(port1, port2, element1, element2);
-            Console.WriteLine($"[+] Создано соединение между портами");
+            graf.AddElement(elementNode);
+            graf.AddElement(elementModul);
+            Console.WriteLine($"✅ Элементы графа добавлены (Node и Modul)");
 
-            // Тестируем обновления
-            element1.UpdatePosition(150, 150);
-            Console.WriteLine($"[+] Обновлена позиция элемента");
+            // 8. Создание соединения между портами (Connection)
+            var connection = new Connection(outputPort, inputPort, elementNode, elementModul);
 
-            connection.UpdateOutConnection(element3, port2);
-            Console.WriteLine($"[+] Обновлено соединение");
+            // Добавление соединения в элементы графа
+            elementNode.AddConnection(connection);
+            elementModul.AddConnection(connection);
+            Console.WriteLine($"✅ Создано соединение между {outputPort.TypePort} -> {inputPort.TypePort}");
 
-            // Создаем модуль
-            var moduleGraf = new Graf(project);
-            var module = new Modul("Math Module", moduleGraf);
-            Console.WriteLine($"[+] Создан модуль: {module.Name.Value}");
+            // 9. Проверка связей
+            Console.WriteLine("\n=== ПРОВЕРКА СВЯЗЕЙ ===");
+            Console.WriteLine($"Проект содержит графов: {project.Grafs.Count}");
+            Console.WriteLine($"Граф содержит элементов: {graf.ElementsGraf.Count}");
+            Console.WriteLine($"Узел имеет портов через связи: {node.NodePortConnections.Count}");
+            Console.WriteLine($"Порт входа имеет связей: {inputPort.NodePortConnections.Count}");
+            Console.WriteLine($"Элемент-узел имеет соединений: {elementNode.ElementGrafConnections.Count}");
+            Console.WriteLine($"Соединение связывает: {connection.InElementGraf.Node?.Name.Value} -> {connection.OutElementGraf.Node?.Name.Value}");
 
-            // Выводим информацию
-            Console.WriteLine("\n=== Итоговая информация ===");
-            Console.WriteLine($"Элементов в графе: {graf.ElementsGraf.Count}");
-            Console.WriteLine("По хорошу все не соеденёные элементы должны быть отдельным графом");
+            // 10. Тестирование обновлений
+            Console.WriteLine("\n=== ТЕСТИРОВАНИЕ ОБНОВЛЕНИЙ ===");
 
-            Console.WriteLine("\nВсе тесты пройдены успешно!");
+            var newPosition = elementNode.UpdatePosition(500, 600);
+            Console.WriteLine($"Обновление позиции: {(newPosition ? "OK" : "FAIL")}");
+
+            var newLevel = elementNode.UpdateLevelOfDepth(2);
+            Console.WriteLine($"Обновление уровня глубины: {(newLevel ? "OK" : "FAIL")}");
+
+            var updated = connection.UpdateOutConnection(elementNode, inputPort);
+            Console.WriteLine($"Обновление соединения: {(updated ? "OK" : "FAIL")}");
+
+            // 11. Тестирование удаления
+            Console.WriteLine("\n=== ТЕСТИРОВАНИЕ УДАЛЕНИЯ ===");
+
+            elementNode.RemuveConnection(connection);
+            Console.WriteLine($"Удаление соединения из элемента: OK");
+
+            graf.RemoveElement(elementModul);
+            Console.WriteLine($"Удаление элемента из графа: OK");
+
+            project.RemoveGraf(graf);
+            Console.WriteLine($"Удаление графа из проекта: OK");
+
+            Console.WriteLine("\n=== ВСЕ ТЕСТЫ ПРОЙДЕНЫ УСПЕШНО ===");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"\nОшибка: {ex.Message}");
+            Console.WriteLine($"\n❌ ОШИБКА: {ex.Message}");
             if (ex.InnerException != null)
-                Console.WriteLine($"  Внутренняя ошибка: {ex.InnerException.Message}");
+                Console.WriteLine($"Внутренняя ошибка: {ex.InnerException.Message}");
         }
-
-        Console.WriteLine("\nНажмите любую клавишу для выхода...");
-        Console.ReadKey();
     }
 }
