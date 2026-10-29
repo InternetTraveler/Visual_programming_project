@@ -15,8 +15,8 @@ namespace VisualProgramming.Servises;
 /// <param name="mapper">Маппер доменных моделей и моделей приложения.</param>
 public class ProjectApplicationService(
     IRepository<Project, Guid> repository,
-    IMapper mapper)
-    : IProjectAplicationService
+    ICascadeDeleteService cascade,
+    IMapper mapper) : IProjectAplicationService
 {
     /// <inheritdoc/>
     public async Task<IEnumerable<ProjectModel>> GetModelsAsync(CancellationToken cancellationToken = default)
@@ -50,10 +50,13 @@ public class ProjectApplicationService(
     }
 
     /// <inheritdoc/>
-    public async Task<bool> DeleteModelAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<bool> DeleteModelAsync(Guid id, CancellationToken ct = default)
     {
-        var project = await repository.GetByIdAsync(id, cancellationToken);
-        return project is not null && await repository.DeleteAsync(project, cancellationToken);
+        var project = await repository.GetByIdAsync(id, ct);
+        if (project is null) return false;
+
+        await cascade.DeleteProjectAsync(id, ct);
+        return true;
     }
 
     /// <inheritdoc/>

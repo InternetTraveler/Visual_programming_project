@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using VisualProgramming.Domain.Base;
 using VisualProgramming.Domain.Entites;
 using VisualProgramming.Domain.Enum;
 using VisualProgramming.Moduls.Port;
+using VisualProgramming.Repository;
 using VisualProgramming.Repository.Base;
 using VisualProgramming.Servises.Abstraction;
 
@@ -15,8 +15,9 @@ namespace VisualProgramming.Servises;
 /// <param name="mapper">Маппер доменных моделей и моделей приложения.</param>
 public class PortApplicationService(
     IRepository<Port, Guid> repository,
-    IMapper mapper)
-    : IPortAplicationService
+    INodePortConnectionRepository nodePortConnectionRepository,
+    ICascadeDeleteService cascade,
+    IMapper mapper) : IPortAplicationService
 {
     /// <inheritdoc/>
     public async Task<IEnumerable<PortModel>> GetModelsAsync(CancellationToken cancellationToken = default)
@@ -34,7 +35,6 @@ public class PortApplicationService(
     public async Task<PortModel?> CreateModelAsync(CreatePortModel model, CancellationToken cancellationToken = default)
     {
         var port = new Port(
-            mapper.Map<BaseNode>(model.node),
             (TypePort)model.typePort,
             model.description);
 
@@ -54,17 +54,32 @@ public class PortApplicationService(
     }
 
     /// <inheritdoc/>
-    public async Task<bool> DeleteModelAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<bool> DeleteModelAsync(Guid id, CancellationToken ct = default)
     {
-        var port = await repository.GetByIdAsync(id, cancellationToken);
-        return port is not null && await repository.DeleteAsync(port, cancellationToken);
+        var port = await repository.GetByIdAsync(id, ct);
+        if (port is null) return false;
+
+        await cascade.DeletePortAsync(id, ct);
+        return true;
     }
 
     public async Task<IEnumerable<PortModel>> GetByNodeIdAsync(Guid nodeId, CancellationToken cancellationToken = default)
     {
+        var connections = await nodePortConnectionRepository.GetByNodeIdAsync(nodeId, cancellationToken);
+
+        var portIds = connections
+            .Where(c => c.Port is not null)
+            .Select(c => c.Port!.Id)
+            .Distinct()
+            .ToHashSet();
+
+        if (portIds.Count == 0)
+            return [];
+
         var ports = await repository.GetAllAsync(cancellationToken, true);
+
         return ports
-            .Where(p => p.Node?.Id == nodeId)
+            .Where(p => portIds.Contains(p.Id))
             .Select(mapper.Map<PortModel>);
     }
 }

@@ -4,9 +4,10 @@ namespace VisualProgramming.Moduls.ElementGraf;
 
 public record ElementGrafModel(
     Guid Id,
-    Guid baseNode,
-    int levelLevelOfDepthOperation,
-    bool isModul,
-    Guid graf,
-    double positionX,
-    double positionY) : IModel<Guid>;
+    Guid BaseNodeId,
+    int LevelLevelOfDepthOperation,
+    bool IsModul,
+    Guid? GrafId,
+    double PositionX,
+    double PositionY
+) : IModel<Guid>;

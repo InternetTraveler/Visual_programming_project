@@ -2,6 +2,7 @@
 using VisualProgramming.Domain.Base;
 using VisualProgramming.Domain.Entites;
 using VisualProgramming.Moduls.NodePortConnection;
+using VisualProgramming.Repository;
 using VisualProgramming.Repository.Base;
 using VisualProgramming.Servises.Abstraction;
 
@@ -14,13 +15,26 @@ namespace VisualProgramming.Servises;
 /// <param name="mapper">Маппер доменных моделей и моделей приложения.</param>
 public class NodePortConnectionApplicationService(
     IRepository<NodePortConnection, Guid> repository,
+    INodeRepository nodeRepository,
+    IPortRepository portRepository,
     IMapper mapper)
     : INodePortConnectionAplicationService
 {
+    /// <summary>
+    /// Единый способ построения модели связи — такой же, как при создании.
+    /// </summary>
+    private static NodePortConnectionModel? ToModel(NodePortConnection connection)
+    {
+        if (connection?.Node is null || connection.Port is null)
+            return null;
+
+        return new(connection.Id, connection.Node.Id, connection.Port.Id);
+    }
+
     /// <inheritdoc/>
     public async Task<IEnumerable<NodePortConnectionModel>> GetModelsAsync(CancellationToken cancellationToken = default)
         => (await repository.GetAllAsync(cancellationToken, true))
-        .Select(mapper.Map<NodePortConnectionModel>);
+            .Select(mapper.Map<NodePortConnectionModel>);
 
     /// <inheritdoc/>
     public async Task<NodePortConnectionModel?> GetModelByIdAsync(Guid id, CancellationToken cancellationToken = default)
@@ -32,12 +46,17 @@ public class NodePortConnectionApplicationService(
     /// <inheritdoc/>
     public async Task<NodePortConnectionModel?> CreateModelAsync(CreateNodePortConnectionModel model, CancellationToken cancellationToken = default)
     {
-        var connection = new NodePortConnection(
-            mapper.Map<BaseNode>(model.node),
-            mapper.Map<Port>(model.port));
+        var node = await nodeRepository.GetByIdAsync(model.nodeId, cancellationToken);
+        var port = await portRepository.GetByIdAsync(model.portId, cancellationToken);
+
+        if (node is null || port is null)
+            return null;
+
+        var connection = new NodePortConnection(node, port);
 
         var created = await repository.AddAsync(connection, cancellationToken);
-        return created is null ? null : mapper.Map<NodePortConnectionModel>(created);
+
+        return created is null ? null : ToModel(created);
     }
 
     /// <inheritdoc/>

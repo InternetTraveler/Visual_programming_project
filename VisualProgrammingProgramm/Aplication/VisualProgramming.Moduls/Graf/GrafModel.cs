@@ -5,4 +5,5 @@ namespace VisualProgramming.Moduls.Graf;
 
 public record GrafModel(
     Guid Id,
-    Guid project) : IModel<Guid>;
+    Guid projectId
+) : IModel<Guid>;

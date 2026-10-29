@@ -4,10 +4,8 @@ using VisualProgramming.Moduls.Base;
 namespace VisualProgramming.Moduls.ElementGraf;
 
 public record CreateElementGrafModel(
-    Guid Id,
-    Guid baseNode,
-    int levelLevelOfDepthOperation,
+    Guid baseNodeId,
     bool isModul,
-    Guid graf,
     double positionX,
-    double positionY) : ICreateModel;
+    double positionY,
+    Guid projectID) : ICreateModel;

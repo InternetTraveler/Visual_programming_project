@@ -1,12 +1,8 @@
 ﻿using AutoMapper;
-using System.Reflection;
-using System.Xml.Linq;
 using VisualProgramming.Domain.Entites;
-using VisualProgramming.Domain.Enum;
 using VisualProgramming.Moduls.Graf;
 using VisualProgramming.Moduls.Modul;
 using VisualProgramming.Moduls.NodePortConnection;
-using VisualProgramming.Repository;
 using VisualProgramming.Repository.Base;
 using VisualProgramming.Servises.Abstraction;
 using VisualProgramming.ValueObject;
@@ -21,8 +17,9 @@ namespace VisualProgramming.Servises;
 public class ModulApplicationService(
     IRepository<Modul, Guid> repository,
     IRepository<NodePortConnection, Guid> nodePortConnectionRepository,
-    IMapper mapper)
-    : IModulAplicationService
+    IGraphReorganizer reorganizer,
+    ICascadeDeleteService cascade,
+    IMapper mapper) : IModulAplicationService
 {
     public async Task<IEnumerable<ModulModel>> GetModelsAsync(CancellationToken cancellationToken = default)
         => (await repository.GetAllAsync(cancellationToken, true))
@@ -34,79 +31,43 @@ public class ModulApplicationService(
         return modul is null ? null : mapper.Map<ModulModel>(modul);
     }
 
-    public async Task<ModulModel?> CreateModelAsync(CreateModulModel model, CancellationToken cancellationToken = default)
+    public async Task<ModulModel?> CreateModelAsync(CreateModulModel model, CancellationToken ct = default)
     {
         var graf = mapper.Map<Graf>(model.grafOPeration);
         var modul = new Modul(new Name(model.name!), graf);
 
-        var elements = graf.ElementsGraf.ToList();
-        var firstDepth = elements.Min(e => e.LevelLevelOfDepthOperation);
-        var withIncoming = elements.SelectMany(e => e.ElementGrafConnections)
-            .Where(c => c.OutElementGraf is not null).Select(c => c.OutElementGraf!.Id).ToHashSet();
-        var withOutgoing = elements.SelectMany(e => e.ElementGrafConnections)
-            .Where(c => c.InElementGraf is not null).Select(c => c.InElementGraf!.Id).ToHashSet();
+        foreach (var port in reorganizer.GetBoundaryPorts(graf))
+            await nodePortConnectionRepository.AddAsync(new NodePortConnection(modul, port), ct);
 
-        var boundaryPorts = elements
-            .Where(e => !withIncoming.Contains(e.Id) && e.LevelLevelOfDepthOperation == firstDepth)
-            .SelectMany(e => e.Node!.NodePortConnections)
-            .Where(c => c.Port?.TypePort == TypePort.OUTPUT)
-            .Select(c => c.Port!)
-            .Concat(elements
-                .Where(e => !withOutgoing.Contains(e.Id))
-                .SelectMany(e => e.Node!.NodePortConnections)
-                .Where(c => c.Port?.TypePort == TypePort.INPUT)
-                .Select(c => c.Port!));
-
-        foreach (var port in boundaryPorts)
-            await nodePortConnectionRepository.AddAsync(new NodePortConnection(modul, port), cancellationToken);
-
-        var created = await repository.AddAsync(modul, cancellationToken);
+        var created = await repository.AddAsync(modul, ct);
         return created is null ? null : mapper.Map<ModulModel>(created);
     }
 
-    public async Task<bool> UpdateModelAsync(ModulModel model, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateModelAsync(ModulModel model, CancellationToken ct = default)
     {
-        var modul = await repository.GetByIdAsync(model.Id, cancellationToken);
-        if (modul is null)
-            return false;
+        var modul = await repository.GetByIdAsync(model.Id, ct);
+        if (modul is null) return false;
 
-        foreach (var connection in modul.NodePortConnections.ToList())
+        foreach (var c in modul.NodePortConnections.ToList())
         {
-            modul.RemoveNodePortConnection(connection);
-            await nodePortConnectionRepository.DeleteAsync(connection, cancellationToken);
+            modul.RemoveNodePortConnection(c);
+            await nodePortConnectionRepository.DeleteAsync(c, ct);
         }
 
         if (modul.GrafOperation is not null)
-        {
-            var elements = modul.GrafOperation.ElementsGraf.ToList();
-            var firstDepth = elements.Min(e => e.LevelLevelOfDepthOperation);
-            var withIncoming = elements.SelectMany(e => e.ElementGrafConnections)
-                .Where(c => c.OutElementGraf is not null).Select(c => c.OutElementGraf!.Id).ToHashSet();
-            var withOutgoing = elements.SelectMany(e => e.ElementGrafConnections)
-                .Where(c => c.InElementGraf is not null).Select(c => c.InElementGraf!.Id).ToHashSet();
+            foreach (var port in reorganizer.GetBoundaryPorts(modul.GrafOperation))
+                await nodePortConnectionRepository.AddAsync(new NodePortConnection(modul, port), ct);
 
-            var boundaryPorts = elements
-                .Where(e => !withIncoming.Contains(e.Id) && e.LevelLevelOfDepthOperation == firstDepth)
-                .SelectMany(e => e.Node!.NodePortConnections)
-                .Where(c => c.Port?.TypePort == TypePort.OUTPUT)
-                .Select(c => c.Port!)
-                .Concat(elements
-                    .Where(e => !withOutgoing.Contains(e.Id))
-                    .SelectMany(e => e.Node!.NodePortConnections)
-                    .Where(c => c.Port?.TypePort == TypePort.INPUT)
-                    .Select(c => c.Port!));
-
-            foreach (var port in boundaryPorts)
-                await nodePortConnectionRepository.AddAsync(new NodePortConnection(modul, port), cancellationToken);
-        }
-
-        return await repository.UpdateAsync(modul, cancellationToken);
+        return await repository.UpdateAsync(modul, ct);
     }
 
-    public async Task<bool> DeleteModelAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<bool> DeleteModelAsync(Guid id, CancellationToken ct = default)
     {
-        var modul = await repository.GetByIdAsync(id, cancellationToken);
-        return modul is not null && await repository.DeleteAsync(modul, cancellationToken);
+        var modul = await repository.GetByIdAsync(id, ct);
+        if (modul is null) return false;
+
+        await cascade.DeleteModulAsync(id, ct);
+        return true;
     }
 
     public async Task<GrafModel?> GetGrafOperationAsync(Guid modulId, CancellationToken cancellationToken = default)

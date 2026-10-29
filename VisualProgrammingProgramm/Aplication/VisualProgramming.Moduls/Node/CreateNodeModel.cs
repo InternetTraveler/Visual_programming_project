@@ -2,7 +2,6 @@
 
 namespace VisualProgramming.Moduls.Node;
 
-public record CreateNodeModel(
-    Guid Id, 
+public record CreateNodeModel( 
     string? name, 
     int typeOperation) : ICreateModel;

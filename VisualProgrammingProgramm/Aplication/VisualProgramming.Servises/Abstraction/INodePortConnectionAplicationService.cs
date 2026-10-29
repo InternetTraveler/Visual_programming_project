@@ -1,4 +1,5 @@
 ﻿
+using VisualProgramming.Domain.Entites;
 using VisualProgramming.Moduls.NodePortConnection;
 using VisualProgramming.Servises.Abstraction.Base;
 

@@ -3,5 +3,4 @@
 namespace VisualProgramming.Moduls.Graf;
 
 public record CreateGrafModel(
-    Guid Id, 
     Guid project) : ICreateModel;

@@ -2,6 +2,7 @@
 using VisualProgramming.Domain.Entites;
 using VisualProgramming.Moduls.ElementGraf;
 using VisualProgramming.Moduls.Graf;
+using VisualProgramming.Repository;
 using VisualProgramming.Repository.Base;
 using VisualProgramming.Servises.Abstraction;
 
@@ -15,8 +16,9 @@ namespace VisualProgramming.Servises;
 public class GrafApplicationService(
     IRepository<Graf, Guid> repository,
     IRepository<ElementGraf, Guid> elementGrafRepository,
-    IMapper mapper)
-    : IGrafAplicationService
+    IProjectRepository projectRepository,
+    ICascadeDeleteService cascade,
+    IMapper mapper) : IGrafAplicationService
 {
     public async Task<IEnumerable<GrafModel>> GetModelsAsync(CancellationToken cancellationToken = default)
         => (await repository.GetAllAsync(cancellationToken, true))
@@ -30,7 +32,8 @@ public class GrafApplicationService(
 
     public async Task<GrafModel?> CreateModelAsync(CreateGrafModel model, CancellationToken cancellationToken = default)
     {
-        var graf = new Graf(mapper.Map<Project>(model.project));
+        var project = await projectRepository.GetByIdAsync(model.project, cancellationToken);
+        var graf = new Graf(project);
         var created = await repository.AddAsync(graf, cancellationToken);
         return created is null ? null : mapper.Map<GrafModel>(created);
     }
@@ -41,14 +44,17 @@ public class GrafApplicationService(
         if (graf is null)
             return false;
 
-        graf.UpdateProject(mapper.Map<Project>(model.project));
+        graf.UpdateProject(mapper.Map<Project>(model.projectId));
         return await repository.UpdateAsync(graf, cancellationToken);
     }
 
-    public async Task<bool> DeleteModelAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<bool> DeleteModelAsync(Guid id, CancellationToken ct = default)
     {
-        var graf = await repository.GetByIdAsync(id, cancellationToken);
-        return graf is null ? false : await repository.DeleteAsync(graf, cancellationToken);
+        var graf = await repository.GetByIdAsync(id, ct);
+        if (graf is null) return false;
+
+        await cascade.DeleteGrafAsync(id, ct);
+        return true;
     }
 
     public async Task<bool> IsContainsProjectAsync(Guid grafId, Guid projectId, CancellationToken cancellationToken = default)

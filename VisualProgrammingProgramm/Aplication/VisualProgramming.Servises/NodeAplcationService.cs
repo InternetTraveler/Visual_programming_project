@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using System.Reflection;
 using VisualProgramming.Domain.Entites;
 using VisualProgramming.Domain.Enum;
 using VisualProgramming.Moduls.Node;
 using VisualProgramming.Moduls.NodePortConnection;
-using VisualProgramming.Repository;
 using VisualProgramming.Repository.Base;
 using VisualProgramming.Servises.Abstraction;
 using VisualProgramming.ValueObject;
@@ -19,8 +17,8 @@ namespace VisualProgramming.Servises;
 public class NodeApplicationService(
     IRepository<Node, Guid> repository,
     IRepository<NodePortConnection, Guid> nodePortConnectionRepository,
-    IMapper mapper)
-    : INodeAplicationService
+    ICascadeDeleteService cascade,
+    IMapper mapper) : INodeAplicationService
 {
     public async Task<IEnumerable<NodeModel>> GetModelsAsync(CancellationToken cancellationToken = default)
         => (await repository.GetAllAsync(cancellationToken, true))
@@ -51,10 +49,13 @@ public class NodeApplicationService(
         return await repository.UpdateAsync(node, cancellationToken);
     }
 
-    public async Task<bool> DeleteModelAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<bool> DeleteModelAsync(Guid id, CancellationToken ct = default)
     {
-        var node = await repository.GetByIdAsync(id, cancellationToken);
-        return node is not null && await repository.DeleteAsync(node, cancellationToken);
+        var node = await repository.GetByIdAsync(id, ct);
+        if (node is null) return false;
+
+        await cascade.DeleteNodeAsync(id, ct);
+        return true;
     }
 
     public async Task<IEnumerable<NodePortConnectionModel>> GetNodePortConnectionsAsync(Guid nodeId, CancellationToken cancellationToken = default)
