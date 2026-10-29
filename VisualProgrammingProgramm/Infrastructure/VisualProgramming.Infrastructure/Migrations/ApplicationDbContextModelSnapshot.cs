@@ -39,7 +39,7 @@ namespace VisualProgramming.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BaseNodes", (string)null);
+                    b.ToTable("BaseNode");
 
                     b.HasDiscriminator<string>("NodeType").HasValue("BaseNode");
 
@@ -163,15 +163,10 @@ namespace VisualProgramming.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<Guid>("NodeId")
-                        .HasColumnType("uuid");
-
                     b.Property<int>("TypePort")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("NodeId");
 
                     b.ToTable("Ports");
                 });
@@ -296,17 +291,6 @@ namespace VisualProgramming.Infrastructure.Migrations
                     b.Navigation("Node");
 
                     b.Navigation("Port");
-                });
-
-            modelBuilder.Entity("VisualProgramming.Domain.Entites.Port", b =>
-                {
-                    b.HasOne("VisualProgramming.Domain.Base.BaseNode", "Node")
-                        .WithMany()
-                        .HasForeignKey("NodeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Node");
                 });
 
             modelBuilder.Entity("VisualProgramming.Domain.Entites.Modul", b =>

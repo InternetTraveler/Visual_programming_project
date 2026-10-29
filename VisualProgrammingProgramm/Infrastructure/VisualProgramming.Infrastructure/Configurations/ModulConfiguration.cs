@@ -9,7 +9,7 @@ public class ModulConfiguration : IEntityTypeConfiguration<Modul>
 {
     public void Configure(EntityTypeBuilder<Modul> builder)
     {
-        builder.HasKey(b => b.Id);
+        //builder.HasKey(b => b.Id);
 
         builder.HasOne(x => x.GrafOperation).WithMany().HasForeignKey("id_operation");
     }

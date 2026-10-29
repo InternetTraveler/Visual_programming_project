@@ -17,11 +17,6 @@ namespace VisualProgramming.Domain.Entites;
 public class Port : Entity<Guid>
 {
     /// <summary>
-    /// Получает узел, которому принадлежит порт.
-    /// </summary>
-    public BaseNode Node { get; private set; }
-
-    /// <summary>
     /// Получает тип порта (входной или выходной).
     /// </summary>
     public TypePort TypePort { get; private set; }
@@ -46,10 +41,9 @@ public class Port : Entity<Guid>
     /// <param name="typePort">Тип порта (входной или выходной).</param>
     /// <param name="description">Описание порта.</param>
     /// <exception cref="PortNullExeption">Выбрасывается, если node равен null.</exception>
-    public Port(BaseNode node, TypePort typePort, string description)
+    public Port(TypePort typePort, string description)
         : base(Guid.NewGuid())
     {
-        Node = node ?? throw new PortNullExeption(this, nameof(node), typeof(Node));
         TypePort = typePort;
         Description = description;
     }
@@ -59,7 +53,6 @@ public class Port : Entity<Guid>
     /// </summary>
     protected Port() : base(Guid.NewGuid())
     {
-        Node = default!;
         TypePort = default!;
         Description = default!;
     }
@@ -68,14 +61,12 @@ public class Port : Entity<Guid>
     /// Инициализирует новый экземпляр порта с указанным идентификатором.
     /// </summary>
     /// <param name="Id">Уникальный идентификатор порта.</param>
-    /// <param name="node">Узел-владелец порта.</param>
     /// <param name="typePort">Тип порта (входной или выходной).</param>
     /// <param name="description">Описание порта.</param>
     /// <exception cref="PortNullExeption">Выбрасывается, если node равен null.</exception>
-    protected Port(Guid Id, BaseNode node, TypePort typePort, string description)
+    protected Port(Guid Id, TypePort typePort, string description)
         : base(Id)
     {
-        Node = node ?? throw new PortNullExeption(this, nameof(node), typeof(Node));
         TypePort = typePort;
         Description = description;
     }

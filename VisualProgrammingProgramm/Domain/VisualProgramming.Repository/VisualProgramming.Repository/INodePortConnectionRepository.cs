@@ -37,4 +37,10 @@ public interface INodePortConnectionRepository : IRepository<NodePortConnection,
     /// связанный со связью, или null, если связь не найдена.
     /// </returns>
     Task<Port?> GetPortByIdNodePortConnectionAsync(Guid id, CancellationToken cancellationToken);
+
+    // Получение всех связей для узла
+    Task<IEnumerable<NodePortConnection>?> GetByNodeIdAsync(Guid nodeId, CancellationToken cancellationToken = default);
+
+    // Получение всех связей для порта
+    Task<IEnumerable<NodePortConnection>?> GetByPortIdAsync(Guid portId, CancellationToken cancellationToken = default);
 }
